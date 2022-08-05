@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: headfragment">
+
+</head>
+<body>
+
+<div th:replace="fragments/general.html :: pageHeadByRole"></div>
+
+<h4 th:text="${actionDescription}"></h4>
+<hr class="hr">
+
+<form th:action="@{${action}}">
+
+    <input hidden="hidden" th:field="${campaign.id}">
+
+    <input id="name" class="form-control width-250" type="text" placeholder="Nazwa kampanii"
+           th:field="${campaign.name}">
+
+    <br>
+    <label for="quantity-input">Ilość:</label> <br>
+    <input id="quantity-input" class="form-control width-250" type="text"
+           th:field="${campaign.quantity}">
+
+    <br>
+    <label for="fileDeadline-input">Termin przesłania materiałów:</label> <br>
+    <input id="fileDeadline-input" class="form-control width-250" type="date"
+           th:field="${campaign.fileDeadline}">
+
+    <br>
+    <label for="deliveryDeadline-input">Termin wykonania:</label> <br>
+    <input id="deliveryDeadline-input" class="form-control width-250" type="date"
+           th:field="${campaign.deliveryDeadline}">
+
+    <br>
+    <label for="deliveryAddress-select">Adres dostawy:</label> <br>
+    <select id="deliveryAddress-select" class="width-250"
+            th:field="${campaign.address.id}">
+        <option th:each="deliveryAddress : ${deliveryAddresses}"
+                th:value="${deliveryAddress.id}"
+                th:text="${deliveryAddress}">
+        </option>
+    </select>
+
+    <br><br>
+
+    <label for="company-select">Firma:</label> <br>
+    <select id="company-select" class="width-250"
+            th:field="${campaign.company.id}">
+        <option th:each="company : ${companies}"
+                th:value="${company.id}"
+                th:text="${company.name}">
+        </option>
+    </select>
+
+    <br><br>
+
+    <label for="payment-term-select">Warunki płatności:</label> <br>
+    <select id="payment-term-select" class="width-250"
+            th:field="${campaign.paymentTerm.id}">
+        <option th:each="paymentTerm : ${paymentTerms}"
+                th:value="${paymentTerm.id}"
+                th:text="${paymentTerm.term}">
+        </option>
+    </select>
+
+    <br>
+    <input class="btn btn-success width-250" type="submit" value="Zapisz"/>
+</form>
+
+<br><br>
+
+<div th:if="${campaign.id > 0}">
+    <hr class="hr">
+    <h4>PRODUKTY</h4>
+
+    <form th:action="@{/product/new/}">
+        <input type="submit" class="btn btn-success btn-sm width-250"
+               value="Nowy produkt">
+    </form>
+    <br><br>
+
+    <form th:action="@{'/campaign/save-product/{campaignId}'(campaignId=${campaign.id})}">
+        <select class="width-250" th:field="${product.id}">
+            <option th:each="product : ${products}"
+                    th:value="${product.id}"
+                    th:text="${product.name}">
+            </option>
+        </select>
+
+        <input type="submit" class="btn btn-info btn-sm width-250"
+               value="Dodaj produkt do kampani"
+               data-waring="Czy na pewno chcesz dodać produkt do kampani?"
+               onclick="return confirm(this.getAttribute('data-waring'))">
+    </form>
+
+    <br><br>
+
+    <table>
+        <tr align="left">
+            <th>Nazwa produktu</th>
+            <th>Kod produktu</th>
+            <th>Akcja produkt</th>
+            <th>Zapytanie</th>
+            <th>Akcja zlecenie</th>
+            <th>Zlecenie</th>
+        </tr>
+
+        <th:block th:each="tempProduct : ${campaign.productList}">
+            <tr align="left">
+                <th th:width="400" th:text="${tempProduct.name}"></th>
+
+                <th>
+                    <select th:if="${tempProduct.codeList.size () > 0}">
+                        <option th:each="code : ${tempProduct.codeList}"
+                                th:text="${code.code}">
+                        </option>
+                    </select>
+                </th>
+                <th>
+                    <form th:action="@{'/product/update/{id}'(id=${tempProduct.id})}">
+                        <input class="btn btn-info btn-sm"
+                               type="submit" value="Edytuj">
+                    </form>
+                    <form th:action="@{'/campaign/delete-product/{campaignId}/{productId}' (campaignId=${campaign.id}, productId=${tempProduct.id})}">
+                        <input class="btn btn-danger btn-sm"
+                               type="submit" value="Usuń produkt"
+                               data-confirm-delete="Czy na pewno chcesz usunąć produkt z kampani?"
+                               onclick="return confirm(this.getAttribute('data-confirm-delete'))">
+                    </form>
+                </th>
+
+                <div th:if="${campaign.isProductInOrder(tempProduct)}"
+                     th:with="curentOrder=${campaign.getOrderByProduct(tempProduct)}">
+
+                    <th th:width="150">
+                        <!--                SAVE QUERY TO PDF-->
+                        <form th:action="@{'/order/print-inquiry/{id}'(id=${curentOrder.id})}">
+                            <input class="btn btn-sm" type="image" src="/icons/pdfQuery.jpg" width="65" height="30">
+                        </form>
+
+                        <!--                SAVE QUERY TO PDF AND CREATE NEW OUTLOOK EMAIL -->
+                        <form th:action="@{'/order/send-inquiry-by-email/{id}'(id=${curentOrder.id})}">
+                            <input class="btn btn-sm" type="image" src="/icons/mailQuery.jpg" width="65" height="30">
+                        </form>
+                    </th>
+
+                    <th>
+                        <!--                    AKCJA-->
+                        <form th:action="@{'/order/update/{id}'(id=${curentOrder.id})}">
+                            <input class="btn btn-info btn-sm width-100"
+                                   type="submit" value="Edytuj">
+                        </form>
+
+                        <form th:action="@{'/order/delete/{id}'(id=${curentOrder.id})}">
+                            <input class="btn btn-danger btn-sm"
+                                   type="submit" value="Usuń"
+                                   data-confirm-delete="Czy na pewno chcesz usunąć zlecenie?"
+                                   onclick="return confirm(this.getAttribute('data-confirm-delete'))">
+                        </form>
+                    </th>
+
+                    <th>
+                        <!--                SAVE ORDER TO PDF-->
+                        <form th:action="@{'/order/print-order/{id}'(id=${curentOrder.id})}">
+
+                            <input th:if="${curentOrder.sent==null}" class="btn btn-sm" type="image"
+                                   src="/icons/pdfOrderNew.jpg" width="100" height="30">
+
+                            <input th:if="${curentOrder.sent!=null}" class="btn btn-sm" type="image"
+                                   src="/icons/pdfOrderUpdate.jpg" width="100" height="30">
+                        </form>
+
+                        <!--                SAVE ODER TO PDF AND CREATE NEW OUTLOOK EMAIL -->
+                        <form th:action="@{'/order/send-order-by-email/{id}'(id=${curentOrder.id})}">
+                            <input class="btn btn-sm" type="image" src="/icons/mailOrder.jpg" width="65" height="30">
+                        </form>
+                    </th>
+                </div>
+
+                <div th:unless="${campaign.isProductInOrder(tempProduct)}">
+                    <th th:width="100"></th>
+                    <th>
+                        <form
+                                th:action="@{'/campaign/create-order/{campaignId}/{productId}' (campaignId=${campaign.id}, productId=${tempProduct.id})}">
+                            <input class="btn btn-success btn-sm"
+                                   type="submit" value="Utwórz nowe zlecenie">
+                        </form>
+                    </th>
+                </div>
+            </tr>
+        </th:block>
+    </table>
+</div>
+
+
+</body>
+</html>

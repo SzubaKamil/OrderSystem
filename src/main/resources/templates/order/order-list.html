@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: headfragment">
+
+
+</head>
+<body>
+
+<div th:replace="fragments/general.html :: pageHeadByRole"></div>
+
+
+<h4 th:text="${actionDescription}"></h4>
+<hr class="hr">
+
+<form th:action="@{/order/search/}">
+    <input type="radio"
+           th:value="-1" th:field="${searchOrder.update}"> Wszystkie </input>
+    <input type="radio"
+           th:value="0" th:field="${searchOrder.update}"> Wysłane </input>
+    <input type="radio"
+           th:value="-2" th:field="${searchOrder.update}"> Do wysłania </input>
+    <br>
+    <input class="form-control width-350 btn-sm inline" type="text"
+           placeholder="NAZWA" th:field="${searchOrder.product.name}">
+
+    <input class="btn btn-light width-250 btn-sm " type="submit" value="Szukaj"/>
+</form>
+
+<br><br>
+
+<form th:action="@{/order/new/}">
+    <input class="btn btn-success  width-350 btn-sm"
+           type="submit" value="Nowe zlecenie">
+</form>
+
+<table>
+    <tr align="left">
+        <th>Nazwa produktu</th>
+        <th>Kod</th>
+        <th>Nakład łączny</th>
+        <th>Data wysłania</th>
+        <th>Termin wykonania</th>
+        <th>Cena zł netto [egz]</th>
+        <th>Kontrahent</th>
+        <th>Firma</th>
+        <th>Użytkownik</th>
+        <th>Zapytanie</th>
+        <th>Akcja</th>
+        <th>Zlecenia</th>
+    </tr>
+
+    <th:block th:each="order : ${orders}">
+        <tr align="left">
+            <td th:width="350" th:text="${order.product.name}"></td>
+            <td>
+                <select th:if="${order.product.codeList.size () > 0}" class="width-250">
+                    <option th:each="code : ${order.product.codeList}"
+                            th:text="${code}">
+                    </option>
+                </select>
+            </td>
+            <td th:width="120" th:text="${#numbers.formatInteger(order.quantity,4,'WHITESPACE')}"></td>
+            <td th:width="120" th:text="${order.sent}"></td>
+            <td th:width="120" th:text="${order.deliveryDeadline}"></td>
+            <td th:width="150" th:text="${#numbers.formatDecimal(order.pricePcs,1,4)}"></td>
+            <td th:width="130">
+                <div th:if="${order.contractor != null} " th:text="${order.contractor.shortcut}"></div>
+            </td>
+            <td th:width="100" th:text="${order.company.shortcut}"></td>
+            <td th:width="100" th:text="${order.username}"></td>
+            <td th:width="150">
+                <!--                SAVE QUERY TO PDF-->
+                <form th:action="@{'/order/print-inquiry/{id}'(id=${order.id})}">
+                    <input class="btn btn-sm" type="image" src="/icons/pdfQuery.jpg" width="65" height="30">
+                </form>
+
+                <!--                SAVE QUERY TO PDF AND CREATE NEW OUTLOOK EMAIL -->
+                <form th:action="@{'/order/send-inquiry-by-email/{id}'(id=${order.id})}">
+                    <input class="btn btn-sm" type="image" src="/icons/mailQuery.jpg" width="65" height="30">
+                </form>
+            </td>
+            <td th:width="120">
+                <form th:action="@{'/order/update/{id}'(id=${order.id})}">
+                    <input class="btn btn-info btn-sm"
+                           type="submit" value="Edytuj">
+                </form>
+                <form th:action="@{'/order/delete/{id}'(id=${order.id})}">
+                    <input class="btn btn-danger btn-sm"
+                           type="submit" value="Usuń"
+                           data-confirm-delete="Czy na pewno chcesz usunąć zlecenie?"
+                           onclick="return confirm(this.getAttribute('data-confirm-delete'))">
+                </form>
+            </td>
+            <td>
+                <!--                SAVE ORDER TO PDF-->
+                <form th:action="@{'/order/print-order/{id}'(id=${order.id})}">
+
+                    <input th:if="${order.sent==null}" class="btn btn-sm" type="image"
+                           src="/icons/pdfOrderNew.jpg" width="100" height="30">
+
+                    <input th:if="${order.sent!=null}" class="btn btn-sm" type="image"
+                           src="/icons/pdfOrderUpdate.jpg" width="100" height="30">
+                </form>
+                <!--                SAVE ODER TO PDF AND CREATE NEW OUTLOOK EMAIL -->
+                <form th:action="@{'/order/send-order-by-email/{id}'(id=${order.id})}">
+                    <input class="btn btn-sm" type="image" src="/icons/mailOrder.jpg" width="65" height="30">
+                </form>
+            </td>
+        </tr>
+    </th:block>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: headfragment">
+
+</head>
+<body>
+
+<script>
+    function showTextField(textFieldId) {
+        const visible = document.getElementById(textFieldId).hidden.valueOf();
+        document.getElementById(textFieldId).hidden = !visible;
+    }
+</script>
+
+<div th:replace="fragments/general.html :: pageHeadByRole"></div>
+
+
+<h4 th:text="${actionDescription}"></h4>
+<hr class="hr">
+
+<form th:action="@{${action}}">
+
+    <input class="form-control width-250" type="text" placeholder="Nazwa produktu" th:field="${product.name}">
+    <input hidden="hidden" th:field="${product.id}">
+
+    <label for="format-select">Format:</label> <br>
+    <select id="format-select" class="width-250" th:field="${product.format.id}">
+        <option value="0" disabled></option>
+        <option th:each="tempFormat : ${formatList}"
+                th:value="${tempFormat.id}"
+                th:text="${tempFormat.format}">
+        </option>
+    </select>
+
+    <br>
+    <input type="checkbox" onclick="showTextField('inputAdditional')">Dodatkowe</input>
+    <input hidden="true" id="inputAdditional" class="form-control width-250" type="text" placeholder="Dodatkowe"
+           th:field="${product.additional}">
+    <br>
+
+    <input type="checkbox" onclick="showTextField('paperSelect')">Papier</input>
+    <div hidden="hidden" id="paperSelect">
+        <select th:field="${product.paper.id}">
+            <option value="0" disabled></option>
+            <option th:each="tempPaper : ${paperList}"
+                    th:value="${tempPaper.id}"
+                    th:text="${tempPaper.value}">
+            </option>
+        </select>
+    </div>
+    <br>
+
+    <input type="checkbox" onclick="showTextField('colorSelect')">Kolor</input>
+    <div hidden="hidden" id="colorSelect">
+        <select th:field="${product.color.id}">
+            <option value="0" disabled></option>
+            <option th:each="tempColor : ${colorList}"
+                    th:value="${tempColor.id}"
+                    th:text="${tempColor.value}">
+            </option>
+        </select>
+    </div>
+    <br>
+
+    <input type="checkbox" onclick="showTextField('inputNumBerPages')">Ilość stron</input>
+    <input hidden="true" id="inputNumBerPages" class="form-control width-250" type="text" placeholder="Ilość stron"
+           th:field="${product.numberPages}">
+    <br>
+
+    <input type="checkbox" onclick="showTextField('inputPerforation')">Perforacja</input>
+    <input hidden="true" id="inputPerforation" class="form-control width-250" type="text" placeholder="Perforacja"
+           th:field="${product.perforation}">
+    <br>
+
+    <input type="checkbox" onclick="showTextField('inputCovering')">Pokrycie</input>
+    <input hidden="true" id="inputCovering" class="form-control width-250" type="text" placeholder="Pokrycie"
+           th:field="${product.covering}">
+    <br>
+
+    <input type="checkbox" onclick="showTextField('inputFlap')">Klapka</input>
+    <input hidden="true" id="inputFlap" class="form-control width-250" type="text" placeholder="Klapka"
+           th:field="${product.flap}">
+    <br>
+
+    <input type="checkbox" onclick="showTextField('inputWindow')">Okno</input>
+    <input hidden="true" id="inputWindow" class="form-control width-250" type="text" placeholder="Okno"
+           th:field="${product.window}">
+    <br>
+
+    <input type="checkbox" onclick="showTextField('inputGlued')">Klejenie</input>
+    <input hidden="true" id="inputGlued" class="form-control width-250" type="text" placeholder="Klejenie"
+           th:field="${product.glued}">
+    <br>
+
+    <input type="checkbox" onclick="showTextField('inputPrintingFinishing')">Uszlachetnienie</input>
+    <input hidden="true" id="inputPrintingFinishing" class="form-control width-250" type="text"
+           placeholder="Uszlachetnienie" th:field="${product.printingFinishing}">
+    <br>
+
+    <input type="checkbox" onclick="showTextField('paperInsideSelect')">Papier środek:</input>
+    <div hidden="hidden" id="paperInsideSelect">
+        <select th:field="${product.paperInside.id}">
+            <option value="0" disabled></option>
+            <option th:each="tempPaper : ${paperList}"
+                    th:value="${tempPaper.id}"
+                    th:text="${tempPaper.value}">
+            </option>
+        </select>
+    </div>
+    <br>
+
+    <input type="checkbox" onclick="showTextField('colorInsideSelect')">Kolor środek:</input>
+    <div hidden="hidden" id="colorInsideSelect">
+        <select th:field="${product.colorInside.id}">
+            <option value="0" disabled></option>
+            <option th:each="tempColor : ${colorList}"
+                    th:value="${tempColor.id}"
+                    th:text="${tempColor.value}">
+            </option>
+        </select>
+    </div>
+    <br>
+
+    <input type="checkbox" onclick="showTextField('inputCover')">Okładka</input>
+    <input hidden="true" id="inputCover" class="form-control width-250" type="text" placeholder="Okładka"
+           th:field="${product.cover}">
+    <br>
+
+    <input type="checkbox" onclick="showTextField('paperCoverSelect')">Papier okładka:</input>
+    <div hidden="hidden" id="paperCoverSelect">
+        <select th:field="${product.paperCover.id}">
+            <option value="0" disabled></option>
+            <option th:each="tempPaper : ${paperList}"
+                    th:value="${tempPaper.id}"
+                    th:text="${tempPaper.value}">
+            </option>
+        </select>
+    </div>
+    <br>
+
+    <input type="checkbox" onclick="showTextField('colorCoverSelect') ">Kolor okładka:</input>
+    <div hidden="hidden" id="colorCoverSelect">
+        <select th:field="${product.colorCover.id}">
+            <option value="0" disabled></option>
+            <option th:each="tempColor : ${colorList}"
+                    th:value="${tempColor.id}"
+                    th:text="${tempColor.value}">
+            </option>
+        </select>
+    </div>
+    <br>
+    <input class="btn btn-success width-250" type="submit" value="Zapisz"/>
+</form>
+
+<br><br>
+<label for="campaign-list">Lista kampani:</label> <br>
+<select id="campaign-list" class="width-250">
+    <option value="0" disabled></option>
+    <option th:each="campaign : ${product.campaignList}"
+            th:value="${campaign.name}"
+            th:text="${campaign.name}">
+    </option>
+</select>
+<br>
+
+<div th:if="${product.id > 0}">
+    <br><br>
+    <hr class="hr">
+    <h4>KODY PRODUKTU</h4>
+    <br>
+
+    <input type="checkbox" onclick="showTextField('productCode')">DODAJ KOD PRODUKT:</input>
+    <div id="productCode" hidden="hidden">
+
+        <form th:action="@{'/product/save-code/{productId}'(productId=${product.id})}">
+            <input class="form-control width-250" type="text" placeholder="Kod produktu"
+                   th:field="${code.code}">
+
+            <label for="code-input">Ilosć:</label> <br>
+            <input id="code-input" class="form-control width-250" type="text" placeholder="Ilość"
+                   th:field="${code.quantity}">
+            <input class="btn btn-info btn-sm width-250" type="submit" value="Dodaj"/>
+        </form>
+    </div>
+
+    <table th:if="${product.codeList.size() > 0}">
+        <tr align="left">
+            <th>ID</th>
+            <th>Kod produktu</th>
+            <th>Ilość</th>
+            <th>Akcja</th>
+        </tr>
+        <th:block th:each="tempCode : ${product.codeList}">
+            <tr align="left">
+                <th th:width="200" th:text="${product.codeList.indexOf(tempCode)}"></th>
+                <th th:width="200" th:text="${tempCode.code}"></th>
+                <th th:width="200" th:text="${tempCode.quantity}"></th>
+                <th>
+                    <form th:action="@{'/product/delete-code/{codeId}/{productId}' (codeId=${tempCode.id}, productId=${product.id})}">
+                        <input class="btn btn-danger btn-sm" type="submit" value="Usuń">
+                    </form>
+                </th>
+            </tr>
+        </th:block>
+    </table>
+</div>
+
+<br><br>
+<hr class="hr">
+
+<input type="checkbox" onclick="showTextField('productsDetails')">DODAJ DETALE PRODUKTÓW:</input>
+
+<div id="productsDetails" hidden="hidden">
+    <div th:replace="product/product-details-form:: productDetailsForm"></div>
+</div>
+
+</body>
+</html>

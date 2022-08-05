@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: headfragment">
+
+</head>
+
+<body>
+
+<div th:replace="fragments/general.html :: pageHeadByRole"></div>
+
+<h4 th:text="${actionDescription}"></h4>
+<hr class="hr">
+
+<form  th:action="@{/campaign/search/}" >
+    <input class="form-control width-350 btn-sm inline" type="text"
+           placeholder="NAZWA" th:field="${searchCampaign.name}">
+
+
+    <input class="btn btn-light width-250 btn-sm " type="submit" value="Szukaj"/>
+</form>
+
+<br><br>
+
+<form th:action="@{/campaign/new/}">
+    <input class="btn btn-success  width-350 btn-sm"
+           type="submit" value="Nowe kampania" >
+</form>
+
+<table>
+    <tr align="left">
+        <th>Nazwa kampanii</th>
+        <th>Ilość</th>
+        <th>Produkty</th>
+        <th>Termin plików</th>
+        <th>Termin wykonania</th>
+        <th>Adres dostawy</th>
+        <th>Firma</th>
+        <th>Akcja</th>
+    </tr>
+
+    <th:block th:each="campaign : ${campaigns}">
+        <tr align="left">
+            <td th:width="350" th:text="${campaign.name}"></td>
+            <td th:width="120" th:text="${#numbers.formatInteger(campaign.quantity,4,'WHITESPACE')}"></td>
+            <td th:width="250">
+                <select th:if="${campaign.productList.size () > 0}" class="width-250">
+                    <option th:each="product : ${campaign.productList}"
+                            th:text="${product.name}">
+                    </option>
+                </select>
+            </td>
+            <td th:width="120" th:text="${campaign.fileDeadline}"></td>
+            <td th:width="150" th:text="${campaign.deliveryDeadline}"></td>
+            <td th:width="250" th:text="${campaign.address}"></td>
+            <td th:width="120">
+                <div th:if="${campaign.company !=null}" th:text="${campaign.company.getShortcut()}"></div>
+            </td>
+            <td>
+                <form th:action="@{'/campaign/update/{id}'(id=${campaign.id})}">
+                    <input class="btn btn-info btn-sm"
+                           type="submit" value="Edytuj">
+                </form>
+                <form th:action="@{'/campaign/delete/{id}'(id=${campaign.id})}" >
+                    <input class="btn btn-danger btn-sm"
+                           type="submit" value="Usuń"
+                           data-confirm-delete="Czy na pewno chcesz usunąć kampanie?"
+                           onclick="return confirm(this.getAttribute('data-confirm-delete'))">
+                </form>
+            </td>
+        </tr>
+    </th:block>
+</table>
+
+</body>
+</html>

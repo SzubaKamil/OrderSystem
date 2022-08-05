@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: headfragment">
+
+
+</head>
+<body>
+
+<div th:replace="fragments/general.html :: pageHeadByRole"></div>
+
+<h4 th:text="${actionDescription}"></h4>
+<hr class="hr">
+
+<form th:action="@{/payment-term/new/}">
+    <input class="btn btn-success  width-250 btn-sm"
+           type="submit" value="Nowe warunki płatności" >
+</form>
+
+<table>
+    <tr align="left">
+        <th>ID</th>
+        <th>Opis</th>
+        <th>Akcja</th>
+    </tr>
+
+    <th:block th:each="paymentTerm : ${paymentTerms}">
+        <tr align="left">
+            <td th:width="150" th:text="${paymentTerm.id}"></td>
+            <td th:width="500" th:text="${paymentTerm.term}"></td>
+            <td>
+                <form th:action="@{'/payment-term/update/{id}'(id=${paymentTerm.id})}">
+                    <input class="btn btn-info btn-sm"
+                           type="submit" value="Edytuj">
+                </form>
+                <form th:action="@{'/payment-term/delete/{id}'(id=${paymentTerm.id})} ">
+                    <input class="btn btn-danger btn-sm"
+                           type="submit" value="Usuń"
+                           data-confirm-delete="Czy na pewno chcesz usunąć warunki płątności?"
+                           onclick="return confirm(this.getAttribute('data-confirm-delete'))">
+                </form>
+            </td>
+        </tr>
+    </th:block>
+</table>
+
+</body>
+</html>

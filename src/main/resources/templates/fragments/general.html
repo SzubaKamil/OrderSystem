@@ -1,0 +1,174 @@
+<!DOCTYPE html>xm
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:fragment="headfragment">
+
+    <meta charset="UTF-8">
+    <title>System Zleceń</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/darkly/bootstrap.min.css"
+          integrity="sha384-nNK9n28pDUDDgIiIqZ/MiyO3F4/9vsMtReZK39klb/MtkZI3/LtjSjlmyVPS3KdN"
+          crossorigin="anonymous">
+
+    <!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/sandstone/bootstrap.min.css"-->
+    <!--          integrity="sha384-zEpdAL7W11eTKeoBJK1g79kgl9qjP7g84KfK3AZsuonx38n8ad+f5ZgXtoSDxPOh"-->
+    <!--          crossorigin="anonymous">-->
+    <style>
+        .width-250 {
+            width: 250px !important;
+        }
+    </style>
+
+    <style>
+        .width-350 {
+            width: 350px !important;
+        }
+    </style>
+
+    <style>
+        .width-100 {
+            width: 100px !important;
+        }
+    </style>
+
+    <style>
+        .hr {
+            background-color: wheat;
+        }
+    </style>
+    <style>
+        form {
+            display: inline;
+        }
+    </style>
+    <style>
+        .inline {
+            display: inline;
+        }
+    </style>
+
+    <script src="https://harvesthq.github.io/chosen/docsupport/jquery-3.2.1.min.js"></script>
+    <script src="https://harvesthq.github.io/chosen/chosen.jquery.js"></script>
+    <link rel="stylesheet" href="https://harvesthq.github.io/chosen/chosen.css">
+    <script>$(function () {
+        $('select').chosen({
+            no_results_text: "Brak wyniku!",
+            placeholder_text_single: "Wybierz z dostępnych opcji",
+            width: "250px"
+        });
+    })
+    </script>
+
+</head>
+
+<body>
+
+
+<div th:fragment="pageHeadByRole">
+
+    <h2 align="center">System zleceń </h2>
+    <br>
+
+    <h4 class="inline" th:inline="text">Witaj [[${#httpServletRequest.remoteUser}]]!</h4>
+
+    <div class="inline" sec:authorize="isAuthenticated()">
+        <form th:action="@{/logout}" method="post">
+            <input class="btn btn-warning inline" type="submit" value="Wyloguj"/>
+        </form>
+
+        <form th:if="${#httpServletRequest.requestURI != '/change-password/'}"
+              action="#" th:action="@{'/change-password/'}">
+            <input class="btn btn-light" type="submit" value="Zmiana Hasła"/>
+        </form>
+
+        <form th:if="${#httpServletRequest.requestURI != '/settings/'}"
+              action="#" th:action="@{'/settings/'}">
+            <input class="btn btn-light" type="submit" value="Ustawiena"/>
+        </form>
+    </div>
+
+    <hr class="hr">
+
+    <div class="inline" sec:authorize="isAuthenticated()">
+
+        <!--IF USER PAGE HEAD USER-->
+        <div class="inline" sec:authorize="hasRole('ROLE_USER')">
+
+            <form th:if="${#httpServletRequest.requestURI != '/order/list/'}"
+                  action="#" th:action="@{/order/list/}">
+                <input class="width-250 btn btn-info" type="submit" value="Zlecenia"/>
+            </form>
+
+            <form th:if="${#httpServletRequest.requestURI != '/campaign/list/'}"
+                  action="#" th:action="@{/campaign/list/}">
+                <input class="width-250 btn btn-info" type="submit" value="Kampania"/>
+            </form>
+
+            <form th:if="${#httpServletRequest.requestURI != '/product/list/'}"
+                  action="#" th:action="@{/product/list/}">
+                <input class="width-250 btn btn-info" type="submit" value="Produkty"/>
+            </form>
+
+            <form th:if="${#httpServletRequest.requestURI != '/product/list-details/'}"
+                  action="#" th:action="@{/product/list-details/}">
+                <input class="width-250 btn btn-info" type="submit" value="Elementy produktów"/>
+            </form>
+
+            <form th:if="${#httpServletRequest.requestURI != '/company/list/'}"
+                  action="#" th:action="@{'/company/list/'}">
+                <input class="width-250 btn btn-info" type="submit" value="Firmy"/>
+            </form>
+
+            <form th:if="${#httpServletRequest.requestURI != '/contractor/list/'}"
+                  action="#" th:action="@{'/contractor/list/'}">
+                <input class="width-250 btn btn-info" type="submit" value="Kontrahenci"/>
+            </form>
+            <form th:if="${#httpServletRequest.requestURI != '/address/list/'}"
+                  action="#" th:action="@{'/address/list/'}">
+                <input class="width-250 btn btn-info" type="submit" value="Adresy"/>
+            </form>
+            <form th:if="${#httpServletRequest.requestURI != '/contact/list/'}"
+                  action="#" th:action="@{'/contact/list/'}">
+                <input class="width-250 btn btn-info" type="submit" value="Kontakty"/>
+            </form>
+            <form th:if="${#httpServletRequest.requestURI != '/payment-term/list/'}"
+                  action="#" th:action="@{'/payment-term/list/'}">
+                <input class="width-250 btn btn-info" type="submit" value="Warunki płatności"/>
+            </form>
+        </div>
+
+        <!--IF ADMIN PAGE HEAD USER-->
+        <div class="inline" sec:authorize="hasRole('ROLE_ADMIN')">
+            <form th:if="${#httpServletRequest.requestURI != '/admin/user/new/'}"
+                  action="#" th:action="@{'/admin/user/new/'}">
+                <input class="width-250 btn btn-info" type="submit" value="Dodaj użytkownika"/>
+            </form>
+            <form th:if="${#httpServletRequest.requestURI != '/admin/user/list/'}"
+                  action="#" th:action="@{'/admin/user/list/'}">
+                <input class="width-250 btn btn-info" type="submit" value="Lista użytkowników"/>
+            </form>
+        </div>
+
+        <hr class="hr">
+    </div>
+
+    <!--    IF NOT LOG IN USER-->
+    <div sec:authorize="isAnonymous()">
+
+        <a sec:authorize="isAnonymous()">
+            <a th:if="${#httpServletRequest.requestURI != '/login'}" class="btn btn-info" href="/login">Zaloguj</a>
+        </a>
+        <form th:if="${#httpServletRequest.requestURI != '/'}" th:action="@{/}" method="post">
+            <input class="width-250 btn btn-info" type="submit" value="Powrót do strony głownej"/>
+        </form>
+
+        <hr class="hr">
+    </div>
+</div>
+
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: headfragment">
+
+</head>
+<body>
+
+<div th:replace="fragments/general.html :: pageHeadByRole"></div>
+
+<h4 th:text="${actionDescription}"></h4>
+<hr class="hr">
+
+<form th:action="@{${action}}">
+
+    <label>DANE KONTAKTU:</label>
+
+    <input hidden="hidden"  th:field="${contact.id}">
+    <input class="form-control width-250" type="text" placeholder="Imie" th:field="${contact.firstName}">
+    <input class="form-control width-250" type="text" placeholder="Imie w wołaczu" th:field="${contact.firstNameVocative}">
+    <input class="form-control width-250" type="text" placeholder="Nazwisko" th:field="${contact.surname}">
+    <input class="form-control width-250" type="text" placeholder="Nr telefonu" th:field="${contact.phone}">
+    <input class="form-control width-250" type="text" placeholder="Nr telefonu 2" th:field="${contact.phone2}">
+    <input class="form-control width-250" type="text" placeholder="E-mail" th:field="${contact.email}">
+    <input th:unless="${contractorSelect}" hidden="hidden"  th:field="${contact.addressId}">
+
+    <div th:if="${contractorSelect}">
+        <label for="format-select">Kontrachent:</label> <br>
+        <select id="format-select" class="width-250" th:field="${contact.addressId}">
+            <option value="0" disabled></option>
+            <option th:each="contractor : ${contractors}"
+                    th:value="${contractor.address.id}"
+                    th:text="${contractor.shortcut}">
+            </option>
+        </select>
+    </div>
+
+    <br>
+    <input class="btn btn-success width-250" type="submit" value="Zapisz"/>
+</form>
+
+</body>
+</html>

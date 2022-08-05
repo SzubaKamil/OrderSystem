@@ -1,0 +1,5 @@
+CREATE USER 'orderSystem'@'localhost' IDENTIFIED BY 'orderSystem';
+
+GRANT ALL PRIVILEGES ON * . * TO 'orderSystem'@'localhost';
+
+ALTER USER 'orderSystem'@'localhost' IDENTIFIED WITH mysql_native_password BY 'orderSystem123';

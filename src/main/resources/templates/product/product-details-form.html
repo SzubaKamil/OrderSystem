@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: headfragment">
+
+</head>
+
+<body>
+
+<div th:replace="fragments/general.html :: pageHeadByRole"></div>
+
+<h4 th:text="${actionDescription}"></h4>
+<hr class="hr">
+
+<div th:fragment="productDetailsForm">
+
+    <table>
+        <td>
+            <div th:unless="${updateFormat} or ${updatePaper}">
+                <form th:action="@{${actionColor}}">
+                    <input hidden="hidden" th:field="${color.id}">
+                    <input class="form-control width-250 inline" type="text" placeholder="KOLOR" th:field="${color.value}">
+                    <input class="btn btn-success width-250" type="submit" value="Dodaj"/>
+                </form>
+            </div>
+        </td>
+
+        <td>
+            <div th:unless="${updateColor} or ${updatePaper}">
+                <form th:action="@{${actionFormat}}">
+                    <input hidden="hidden" th:field="${format.id}">
+                    <input class="form-control width-250 inline" type="text" placeholder="FORMAT" th:field="${format.format}">
+                    <input class="btn btn-success width-250" type="submit" value="Dodaj"/>
+                </form>
+            </div>
+        </td>
+
+        <td>
+            <div th:unless="${updateColor} or ${updateFormat}">
+                <form th:action="@{${actionPaper}}">
+                    <input hidden="hidden" th:field="${paper.id}">
+                    <input class="form-control width-250 inline" type="text" placeholder="PAPIER" th:field="${paper.value}">
+                    <input class="btn btn-success width-250" type="submit" value="Dodaj"/>
+                </form>
+            </div>
+        </td>
+
+    </table>
+</div>
+</body>
+</html>

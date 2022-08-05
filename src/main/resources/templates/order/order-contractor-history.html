@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: headfragment">
+
+</head>
+<body>
+
+<div th:replace="fragments/general.html :: pageHeadByRole"></div>
+
+<h4 th:text="${actionDescription}"></h4>
+<hr class="hr">
+
+<table>
+    <tr align="left">
+        <th>Produkt</th>
+        <th>Nakład</th>
+        <th>Cena zł netto [egz]</th>
+        <th>Cena zł netto [nakład]</th>
+        <th>Data wysłania</th>
+        <th>Liczba aktualizacji</th>
+        <th>Użytkownik</th>
+        <th>Akcja</th>
+    </tr>
+
+    <th:block th:each="order:${orders}">
+        <tr align="left">
+            <td th:width="350" th:text="${order.product.name}"></td>
+            <td th:width="150" th:text="${order.quantity}"></td>
+            <td th:width="200" th:text="${order.pricePcs}"></td>
+            <td th:width="200" th:text=" ${#numbers.formatDecimal(order.pricePcs * order.quantity , 0, 0)}" ></td>
+            <td th:width="150" th:text="${order.sent}"></td>
+            <td th:width="150" th:text="${order.update}"></td>
+            <td th:width="150" th:text="${order.username}"></td>
+            <td>
+                <form th:action="@{'/order/update/{id}'(id=${order.id})}">
+                    <input class="btn btn-info btn-sm"
+                           type="submit" value="Edytuj">
+                </form>
+            </td>
+        </tr>
+    </th:block>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: headfragment">
+
+</head>
+<body>
+
+<div th:replace="fragments/general.html :: pageHeadByRole"></div>
+
+<h4 th:text="${actionDescription}"></h4>
+<hr class="hr">
+
+<form th:action="@{${action}}">
+
+    <label>USTAWIENIA POCZTY:</label>
+
+    <br><br>
+
+    <input hidden="hidden"  th:field="${outlookSetting.username}">
+
+    <label for="path-input">Ścieżka programu outlook</label> <br>
+    <input id="path-input" class="form-control width-350" type="text" placeholder="Ścieżka programu outlook" th:field="${outlookSetting.filePath}">
+    <br>
+
+    <label for="cc_email-input">Email-e DW: wprawadź znak ; pomiędzy </label> <br>
+    <textarea id="cc_email-input" rows = "10" cols = "40" th:field = "${outlookSetting.ccEmails}"  >... </textarea>
+    <br>
+
+    <label for="signature-input">Podpis wiadomości</label> <br>
+    <textarea id="signature-input" rows = "10" cols = "40" th:field = "${outlookSetting.signature}"  >... </textarea>
+    <br>
+
+    <input class="btn btn-success width-350" type="submit" value="Zapisz"/>
+</form>
+
+
+</body>
+</html>

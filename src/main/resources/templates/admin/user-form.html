@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: headfragment">
+
+</head>
+<body>
+
+<div th:replace="fragments/general.html :: pageHeadByRole"></div>
+
+<h4 th:text="${actionDescription}"></h4>
+<hr class="hr">
+
+<form th:action="@{${action}}">
+
+    <input class="form-control width-250" type="text" placeholder="Nazwa użytkownika" th:field="${user.username}">
+    <input class="form-control width-250" type="password" placeholder="Hasło" th:field="${user.password}">
+    <input class="form-control width-250" type="text" placeholder="Imie" th:field="${user.name}">
+    <input class="form-control width-250" type="text" placeholder="Nazwisko" th:field="${user.surname}">
+    <input class="form-control width-250" type="text" placeholder="Telefon" th:field="${user.phone}">
+    <input class="form-control width-250" type="text" placeholder="Telefon 2" th:field="${user.phone2}">
+    <input class="form-control width-250" type="text" placeholder="Email" th:field="${user.email}">
+    <br>
+
+    <input class="btn btn-success width-250" type="submit" value="Zapisz"/>
+</form>
+
+</body>
+</html>

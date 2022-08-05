@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: headfragment">
+
+</head>
+<body>
+
+<script>
+    function countPrice(selectedPrice){
+        var pcsPrice =  document.getElementById('price-input').value / selectedPrice ;
+        document.getElementById('pricePcs').setAttribute('value', pcsPrice);
+    }
+</script>
+
+
+<div th:replace="fragments/general.html :: pageHeadByRole"></div>
+
+<h4 th:text="${actionDescription}"></h4>
+<hr class="hr">
+
+<form th:action="@{${action}}">
+
+    <input hidden="hidden" th:field="${order.id}">
+
+    <label for="format-select">Produkt:</label> <br>
+    <select id="format-select" class="width-250" th:field="${order.product.id}">
+        <option th:each="product : ${products}"
+                th:value="${product.id}"
+                th:text="${product.name}">
+        </option>
+    </select>
+
+    <a th:if="${update}" type="button" class="btn btn-info btn-sm" th:href="@{'/product/update/{id}'(id=${order.product.id})}">Edycja produktu</a>
+
+    <br><br>
+    <label for="quantity-input">Ilość:</label> <br>
+    <input id="quantity-input" class="form-control width-250" type="text" th:field="${order.quantity}">
+    <br>
+
+    <label for="fileDeadline-input">Termin przesłania materiałów:</label> <br>
+    <input id="fileDeadline-input" class="form-control width-250" type="date" th:field="${order.fileDeadline}">
+    <br>
+
+    <label for="deliveryDeadline-input">Termin wykonania:</label> <br>
+    <input id="deliveryDeadline-input" class="form-control width-250" type="date" th:field="${order.deliveryDeadline}">
+    <br>
+
+    <div>
+        <label for="price-input">Cena:</label> <br>
+
+        <input type="radio" name="selectedPrice" onclick="countPrice(1)" > [egz] </input>
+        <input type="radio" name="selectedPrice" onclick="countPrice(1000)" > [1 000 egz] </input>
+        <input type="radio" name="selectedPrice" onclick="countPrice(document.getElementById('quantity-input').value)" > [Nakład] </input>
+
+        <input  value=# id="price-input" class="form-control width-250" type="number" step="any"  min="0">
+        <label>Cena egz.</label>
+        <input readonly id="pricePcs" class="form-control width-250" type="number" step="any"  min="0" th:field="${order.pricePcs}">
+    </div>
+    <br>
+
+    <label for="paymentTerm-select">Warunki płatności:</label> <br>
+    <select id="paymentTerm-select" class="width-250" th:field="${order.paymentTerm.id}">
+        <option th:each="paymentTerm : ${paymentTerms}"
+                th:value="${paymentTerm.id}"
+                th:text="${paymentTerm.term}">
+        </option>
+    </select>
+    <br>
+
+    <label for="contractor-select">Kontrahent:</label> <br>
+    <select id="contractor-select" class="width-250" th:field="${order.contractor.id}">
+        <option value="0" disabled> </option>
+        <option  th:each="contractor : ${contractors}"
+                th:value="${contractor.id}"
+                th:text="${contractor.shortcut}">
+        </option>
+    </select>
+    <br>
+
+    <label for="company-select">Zleceniodawca:</label> <br>
+    <select id="company-select" class="width-250" th:field="${order.company.id}">
+        <option th:each="company : ${companies}"
+                th:value="${company.id}"
+                th:text="${company.shortcut}">
+        </option>
+    </select>
+    <br>
+
+    <label for="delivery-address-select">Adres dostawy:</label> <br>
+    <select id="delivery-address-select" class="width-250" th:field="${order.deliveryAddress.id}">
+        <option th:each="address : ${deliveryAddresses}"
+                th:value="${address.id}"
+                th:text="${address}">
+        </option>
+    </select>
+    <br><br>
+
+    <input class="form-control width-250" type="text" placeholder="Uwagi"
+           th:field="${order.note}">
+    <br>
+
+    <label for="campaign-input">Nazwa Kampania:</label> <br>
+    <input disabled id="campaign-input" class="form-control width-250" type="text" th:field="${order.campaign.name}">
+    <input hidden="hidden" th:field="${order.campaign.id}">
+
+    <label for="sent-input">Data wysłania:</label> <br>
+    <input id="sent-input" class="form-control width-250" type="date" th:field="${order.sent}">
+    <br>
+
+    <input class="btn btn-success width-250" type="submit" value="Zapisz"/>
+</form>
+
+</body>
+</html>

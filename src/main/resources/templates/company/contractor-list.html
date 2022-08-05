@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: headfragment">
+
+
+</head>
+<body>
+
+<div th:replace="fragments/general.html :: pageHeadByRole"></div>
+
+<h4 th:text="${actionDescription}"></h4>
+<hr class="hr">
+
+<form th:action="@{/contractor/new/}">
+    <input class="btn btn-success  width-250 btn-sm"
+           type="submit" value="Nowy kontrahent" >
+</form>
+
+<table>
+    <tr align="left">
+        <th>Kontrahent</th>
+        <th>Pełna nazwa</th>
+        <th>Nip</th>
+        <th>Regon</th>
+        <th>Akcja</th>
+    </tr>
+
+    <th:block th:each="contractor : ${contractors}">
+        <tr align="left">
+            <td th:width="150" th:text="${contractor.shortcut}"></td>
+            <td th:width="400" th:text="${contractor.name}"></td>
+            <td th:width="150" th:text="${contractor.nip}"></td>
+            <td th:width="150" th:text="${contractor.regon}"></td>
+            <td>
+                <form th:action="@{'/contractor/update/{id}'(id=${contractor.id})}">
+                    <input class="btn btn-info btn-sm"
+                           type="submit" value="Edytuj">
+                </form>
+                <form th:action="@{'/contractor/delete/{id}'(id=${contractor.id})} ">
+                    <input class="btn btn-danger btn-sm"
+                           type="submit" value="Usuń"
+                           data-confirm-delete="Czy na pewno chcesz usunąć kontrahenta?"
+                           onclick="return confirm(this.getAttribute('data-confirm-delete'))">
+                </form>
+                <form th:action="@{'/order/contractor-history/{contractorId}/{contractorName}'(contractorId=${contractor.id}, contractorName=${contractor.name})}">
+                    <input class="btn btn-secondary btn-sm"
+                           type="submit" value="Historia">
+                </form>
+            </td>
+        </tr>
+    </th:block>
+</table>
+
+</body>
+</html>

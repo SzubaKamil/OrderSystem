@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: headfragment">
+
+
+</head>
+<body>
+
+<div th:replace="fragments/general.html :: pageHeadByRole"></div>
+
+
+<h4 th:text="${actionDescription}"></h4>
+<hr class="hr">
+
+<form th:action="@{/admin/new-user/}">
+    <input class="btn btn-success  width-250 btn-sm"
+           type="submit" value="Nowy Użytkownik">
+</form>
+
+<table>
+    <tr align="left">
+        <th>Imie</th>
+        <th>Nazwisko</th>
+        <th>Telefon</th>
+        <th>Telefon 2</th>
+        <th>E-mail</th>
+        <th>Nazwa użytkownika</th>
+        <th>Rola</th>
+        <th>Aktywny</th>
+        <th>Akcja</th>
+    </tr>
+
+    <th:block th:each="user : ${users}">
+        <tr align="left">
+            <td th:width="150" th:text="${user.name}"></td>
+            <td th:width="200" th:text="${user.surname}"></td>
+            <td th:width="200" th:text="${user.phone}"></td>
+            <td th:width="200" th:text="${user.phone2}"></td>
+            <td th:width="200" th:text="${user.email}"></td>
+            <td th:width="200" th:text="${user.username}"></td>
+            <td th:width="200" th:text="${user.authority.authority}"></td>
+            <td th:width="150" th:text="${user.enabled}"></td>
+
+            <td>
+                <form th:action="@{'/admin/user/update/{id}'(id=${user.username})}">
+                    <input class="btn btn-info btn-sm"
+                           type="submit" value="Edytuj">
+                </form>
+                <form th:action="@{'/admin/user/delete/{id}'(id=${user.username})} ">
+                    <input class="btn btn-danger btn-sm"
+                           type="submit" value="Usuń"
+                           data-confirm-delete="Czy na pewno chcesz usunąć użytkownika?"
+                           onclick="return confirm(this.getAttribute('data-confirm-delete'))">
+                </form>
+            </td>
+        </tr>
+    </th:block>
+</table>
+
+</body>
+</html>

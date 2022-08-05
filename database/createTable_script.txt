@@ -1,0 +1,234 @@
+DROP SCHEMA IF EXISTS `orderSystem`;
+CREATE SCHEMA `orderSystem` DEFAULT CHARACTER SET utf8 COLLATE utf8_polish_ci ;
+
+use `orderSystem`;
+
+SET FOREIGN_KEY_CHECKS = 0;
+
+CREATE TABLE `users` (
+  `username` varchar(50) NOT NULL,
+  `password` varchar(50) NOT NULL,
+  `enabled` tinyint(1) NOT NULL,
+  `name` varchar(100) NULL,
+  `surname` varchar(100) NULL,
+  `phone` VARCHAR(20) NULL,
+  `phone_2` VARCHAR(20) NULL,
+  `email` varchar(200) NULL,
+  PRIMARY KEY (`username`)
+)  ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_polish_ci;
+
+INSERT INTO `users` 
+VALUES 
+('user','{noop}user',1,'user','','','',''),
+('admin','{noop}admin',1,'admin','','','','');
+
+CREATE TABLE `authorities` (
+  `username` varchar(50) NOT NULL,
+  `authority` varchar(50) NOT NULL,
+  UNIQUE KEY `authorities_idx_1` (`username`,`authority`),
+  CONSTRAINT `authorities_ibfk_1` FOREIGN KEY (`username`) REFERENCES `users` (`username`)
+) ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_polish_ci;
+
+INSERT INTO `authorities` 
+VALUES 
+('admin','ROLE_ADMIN'),
+('user','ROLE_USER');
+
+CREATE TABLE `orderSystem`.`company` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `shortcut` VARCHAR(20) NULL,
+  `name` VARCHAR(200) NULL,
+  `nip` VARCHAR(20) NULL,
+  `regon` VARCHAR(20) NULL,
+  `address_id` INT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`address_id`) REFERENCES `address` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_polish_ci;
+
+CREATE TABLE `orderSystem`.`contact` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `first_name` VARCHAR(100) NULL,
+  `first_name_vocative` VARCHAR(100) NULL,
+  `surname` VARCHAR(100) NULL,
+  `phone` VARCHAR(20) NULL,
+  `phone_2` VARCHAR(20) NULL,
+  `email` VARCHAR(200) NULL,
+  `address_id` INT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`address_id`) REFERENCES `address` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_polish_ci;
+
+CREATE TABLE `orderSystem`.`contractor` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `shortcut` VARCHAR(20) NULL,
+  `name` VARCHAR(200) NULL,
+  `nip` VARCHAR(20) NULL,
+  `regon` VARCHAR(20) NULL,
+  `address_id` INT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`address_id`) REFERENCES `address` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_polish_ci;
+
+CREATE TABLE `orderSystem`.`orders` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `quantity` INT NULL,
+  `file_deadline` DATE NULL,
+  `delivery_deadline` DATE NULL,  
+  `sent` DATE NULL,
+  `price_pcs` DOUBLE NULL,
+  `payment_term_id` INT NULL,
+  `delivery_address_id` INT NULL,
+  `product_id` INT NULL,
+  `contractor_id` INT NULL,
+  `company_id` INT NULL,
+  `username` varchar(50) NOT NULL,
+  `update` INT NULL,		
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`payment_term_id`) REFERENCES `payment_term` (`id`),
+  FOREIGN KEY (`delivery_address_id`) REFERENCES `address` (`id`),
+  FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
+  FOREIGN KEY (`contractor_id`) REFERENCES `contractor` (`id`),
+  FOREIGN KEY (`company_id`) REFERENCES `company` (`id`),
+  FOREIGN KEY (`username`) REFERENCES `users` (`username`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_polish_ci;
+
+CREATE TABLE `orderSystem`.`campaign` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(100) NULL,
+  `quantity` INT NULL,
+  `file_deadline` DATE NULL,
+  `delivery_deadline` DATE NULL,  
+  `address_id` INT NULL,
+  `company_id` INT NULL,
+  `payment_term_id` INT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`address_id`) REFERENCES `address` (`id`),
+  FOREIGN KEY (`company_id`) REFERENCES `company` (`id`)
+  FOREIGN KEY (`payment_term_id`) REFERENCES `payment_term` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_polish_ci;
+
+CREATE TABLE `orderSystem`.`payment_term` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `term` VARCHAR(300) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_polish_ci;
+
+CREATE TABLE `orderSystem`.`address` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `street` VARCHAR(100) NULL,
+  `street_number` VARCHAR(30) NULL,
+  `city` VARCHAR(100) NULL,
+  `post_code` VARCHAR(100) NULL,
+  `country` VARCHAR(100) NULL,
+  `is_delivery` BOOLEAN NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_polish_ci;
+
+CREATE TABLE `orderSystem`.`format` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `value` VARCHAR(100) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_polish_ci;
+
+CREATE TABLE `orderSystem`.`color` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `value` VARCHAR(100) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_polish_ci;
+
+CREATE TABLE `orderSystem`.`paper` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `value` VARCHAR(100) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_polish_ci;
+
+CREATE TABLE `orderSystem`.`product` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(200) NULL,
+  `format_id` INT NULL,
+  `additional` VARCHAR(200) NULL,
+  `paper_id` INT NULL,
+  `color_id` INT NULL,
+  `number_pages` VARCHAR(30) NULL,
+  `perforation` VARCHAR(100) NULL,
+  `covering` VARCHAR(100) NULL,
+  `flap` VARCHAR(100) NULL,
+  `window` VARCHAR(100) NULL,
+  `glued` VARCHAR(100) NULL,
+  `printing_finishing` VARCHAR(200) NULL,
+  `paper_inside_id` INT NULL,
+  `color_inside_id` INT NULL,
+  `cover` VARCHAR(100) NULL,
+  `paper_cover_id` INT NULL,
+  `color_cover_id` INT NULL,
+  `note` VARCHAR(200) NULL,  
+  PRIMARY KEY (`id`),
+  FOREIGN KEY(format_id) REFERENCES format(id),
+  FOREIGN KEY(paper_id) REFERENCES paper(id),
+  FOREIGN KEY(color_id) REFERENCES color(id),
+  FOREIGN KEY(paper_inside_id) REFERENCES paper(id),
+  FOREIGN KEY(color_inside_id) REFERENCES color(id),
+  FOREIGN KEY(paper_cover_id) REFERENCES paper(id),
+  FOREIGN KEY(color_cover_id) REFERENCES color(id))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_polish_ci;
+
+CREATE TABLE `orderSystem`.`code` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `code` VARCHAR(100) NULL,
+  `quantity` INT NULL,
+  `product_id` INT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`product_id`) REFERENCES `product` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_polish_ci;
+
+CREATE TABLE `orderSystem`.`campaign_products` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `product_id` INT NULL,
+  `campaign_id` INT NULL,  
+  PRIMARY KEY (`id`),
+  FOREIGN KEY(product_id) REFERENCES product(id),
+  FOREIGN KEY(campaign_id) REFERENCES campaign(id))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_polish_ci;
+
+CREATE TABLE `outlook_setting` (
+  `username` varchar(50) NOT NULL,	
+  `cc_emails` varchar(1000) NULL,
+  `file_path` varchar(100) NULL,
+  `signature` varchar(300) NULL,
+  UNIQUE KEY `outlook_settings_idx_1` (`username`),
+  FOREIGN KEY (`username`) REFERENCES `users` (`username`)
+) ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_polish_ci;
+
+SET FOREIGN_KEY_CHECKS = 1;

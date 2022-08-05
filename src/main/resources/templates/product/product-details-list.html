@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: headfragment">
+
+
+</head>
+<body>
+
+<div th:replace="fragments/general.html :: pageHeadByRole"></div>
+
+<h4 th:text="${actionDescription}"></h4>
+<hr class="hr">
+
+<br>
+<div th:replace="product/product-details-form:: productDetailsForm"></div>
+
+<table th:border="1">
+    <tr th:align="center">
+        <th>KOLOR</th>
+        <th>FORMAT</th>
+        <th>PAPIER</th>
+    </tr>
+
+    <td>
+        <table>
+            <tr align="left">
+                <th>ID</th>
+                <th>Wartość</th>
+                <th>Akcja</th>
+            </tr>
+
+            <th:block th:each="color : ${colorList}">
+                <tr align="left">
+                    <td th:width="50" th:text="${color.id}"></td>
+                    <td th:width="250" th:text="${color.value}"></td>
+                    <td th:width="200">
+                        <form th:action="@{'/product-details/update-color/{id}'(id=${color.id})}">
+                            <input class="btn btn-info btn-sm"
+                                   type="submit" value="Edytuj">
+                        </form>
+                        <form th:action="@{'/product-details/delete-color/{id}'(id=${color.id})}">
+                            <input class="btn btn-danger btn-sm"
+                                   type="submit" value="Usuń"
+                                   data-confirm-delete="Czy na pewno chcesz usunąć kolor?"
+                                   onclick="return confirm(this.getAttribute('data-confirm-delete'))">
+                        </form>
+                    </td>
+                </tr>
+            </th:block>
+        </table>
+    </td>
+
+    <td style="vertical-align:top">
+        <table>
+            <tr align="left">
+                <th>ID</th>
+                <th>Wartość</th>
+                <th>Akcja</th>
+            </tr>
+
+            <th:block th:each="format : ${formatList}">
+                <tr align="left">
+                    <td th:width="50" th:text="${format.id}"></td>
+                    <td th:width="250" th:text="${format.format}"></td>
+                    <td th:width="200">
+                        <form th:action="@{'/product-details/update-format/{id}'(id=${format.id})}">
+                            <input class="btn btn-info btn-sm"
+                                   type="submit" value="Edytuj">
+                        </form>
+                        <form th:action="@{'/product-details/delete-format/{id}'(id=${format.id})} ">
+                            <input class="btn btn-danger btn-sm"
+                                   type="submit" value="Usuń"
+                                   data-confirm-delete="Czy na pewno chcesz usunąć format?"
+                                   onclick="return confirm(this.getAttribute('data-confirm-delete'))">
+                        </form>
+                    </td>
+                </tr>
+            </th:block>
+        </table>
+    </td>
+
+    <td style="vertical-align:top">
+        <table>
+            <tr align="left">
+                <th>ID</th>
+                <th>Wartość</th>
+                <th>Akcja</th>
+            </tr>
+
+            <th:block th:each="paper : ${paperList}">
+                <tr align="left">
+                    <td th:width="50" th:text="${paper.id}"></td>
+                    <td th:width="250" th:text="${paper.value}"></td>
+                    <td th:width="200">
+                        <form th:action="@{'/product-details/update-paper/{id}'(id=${paper.id})}">
+                            <input class="btn btn-info btn-sm"
+                                   type="submit" value="Edytuj">
+                        </form>
+                        <form th:action="@{'/product-details/delete-paper/{id}'(id=${paper.id})}">
+                            <input class="btn btn-danger btn-sm"
+                                   type="submit" value="Usuń"
+                                   data-confirm-delete="Czy na pewno chcesz usunąć papier?"
+                                   onclick="return confirm(this.getAttribute('data-confirm-delete'))">
+                        </form>
+                </tr>
+            </th:block>
+        </table>
+    </td>
+</table>
+
+
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: headfragment">
+
+</head>
+<body>
+
+<div th:replace="fragments/general.html :: pageHeadByRole"></div>
+
+<h4 th:text="${actionDescription}"></h4>
+<hr class="hr">
+
+<div th:fragment="paymentTermForm">
+
+  <form th:action="@{${action}}">
+    <input hidden="hidden" th:field="${paymentTerm.id}">
+    <input class="form-control width-350 inline" type="text" placeholder="WARUNKI PŁATNOŚCI" th:field="${paymentTerm.term}">
+    <input class="btn btn-success width-250" type="submit" value="Dodaj"/>
+  </form>
+
+</div>
+</body>
+</html>

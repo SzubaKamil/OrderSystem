@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: headfragment">
+
+
+</head>
+<body>
+
+<div th:replace="fragments/general.html :: pageHeadByRole"></div>
+
+<h4 th:text="${actionDescription}"></h4>
+<hr class="hr">
+
+<form th:action="@{/contact/new/}">
+    <input class="btn btn-success  width-250 btn-sm"
+           type="submit" value="Nowy kontakt">
+</form>
+
+<table>
+    <tr align="left">
+        <th>Imie</th>
+        <th>Nazwisko</th>
+        <th>Telefon</th>
+        <th>Telefon 2</th>
+        <th>Email</th>
+        <th>Akcja</th>
+    </tr>
+
+    <th:block th:each="contact : ${contacts}">
+        <tr align="left">
+            <td th:width="150" th:text="${contact.firstName}"></td>
+            <td th:width="400" th:text="${contact.surname}"></td>
+            <td th:width="150" th:text="${contact.phone}"></td>
+            <td th:width="150" th:text="${contact.phone2}"></td>
+            <td th:width="150" th:text="${contact.email}"></td>
+            <td>
+                <form th:action="@{'/contact/update/{contactId}'(contactId=${contact.id})}">
+
+                    <input class="btn btn-info btn-sm"
+                           type="submit" value="Edytuj">
+                </form>
+                <form th:action="@{'/contact/delete/{id}'(id=${contact.id})}">
+                    <input class="btn btn-danger btn-sm"
+                           type="submit" value="Usuń"
+                           data-confirm-delete="Czy na pewno chcesz usunąć kontakt?"
+                           onclick="return confirm(this.getAttribute('data-confirm-delete'))">
+                </form>
+            </td>
+        </tr>
+    </th:block>
+</table>
+
+</body>
+</html>

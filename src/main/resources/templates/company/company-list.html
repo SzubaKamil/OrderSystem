@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: headfragment">
+
+
+</head>
+<body>
+
+<div th:replace="fragments/general.html :: pageHeadByRole"></div>
+
+<h4 th:text="${actionDescription}"></h4>
+<hr class="hr">
+
+<form th:action="@{/company/new/}">
+    <input class="btn btn-success  width-250 btn-sm"
+           type="submit" value="Nowy firma" >
+</form>
+
+<table>
+    <tr align="left">
+        <th>Firma</th>
+        <th>Pełna nazwa</th>
+        <th>Nip</th>
+        <th>Regon</th>
+        <th>Akcja</th>
+    </tr>
+
+    <th:block th:each="company : ${companies}">
+        <tr align="left">
+            <td th:width="150" th:text="${company.shortcut}"></td>
+            <td th:width="500" th:text="${company.name}"></td>
+            <td th:width="150" th:text="${company.nip}"></td>
+            <td th:width="150" th:text="${company.regon}"></td>
+            <td>
+                <form th:action="@{'/company/update/{id}'(id=${company.id})}">
+                    <input class="btn btn-info btn-sm"
+                           type="submit" value="Edytuj">
+                </form>
+                <form th:action="@{'/company/delete/{id}'(id=${company.id})} ">
+                    <input class="btn btn-danger btn-sm"
+                           type="submit" value="Usuń"
+                           data-confirm-delete="Czy na pewno chcesz usunąć firmę?"
+                           onclick="return confirm(this.getAttribute('data-confirm-delete'))">
+                </form>
+            </td>
+        </tr>
+    </th:block>
+</table>
+
+</body>
+</html>

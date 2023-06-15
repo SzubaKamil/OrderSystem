@@ -19,7 +19,8 @@ public abstract class Crud <T>{
 
     public List<T> getAll(String tableName, Class<T> tClass ) {
         Session currentSession = entityManager.unwrap(Session.class);
-        Query<T> theQuery = currentSession.createQuery("from " + tableName, tClass);
+        Query<T> theQuery = currentSession.createQuery("from " + tableName + " ORDER BY id DESC " , tClass);
+//        Query<T> theQuery = currentSession.createQuery("from " + tableName , tClass);
         return theQuery.getResultList();
     }
 

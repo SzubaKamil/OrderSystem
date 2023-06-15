@@ -28,6 +28,9 @@ public class Company {
     @JoinColumn(name = "address_id")
     private Address address;
 
+    @Column(name = "cc_emails")
+    private String ccEmails;
+
     public Company() {
     }
 
@@ -79,6 +82,13 @@ public class Company {
         this.address = address;
     }
 
+    public String getCcEmails() {
+        return ccEmails;
+    }
+
+    public void setCcEmails(String ccEmails) {
+        this.ccEmails = ccEmails;
+    }
 
     @Override
     public String toString() {

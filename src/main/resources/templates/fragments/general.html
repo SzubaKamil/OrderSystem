@@ -85,6 +85,11 @@
               action="#" th:action="@{'/settings/'}">
             <input class="btn btn-light" type="submit" value="Ustawiena"/>
         </form>
+
+        <form th:if="${#httpServletRequest.requestURI != '/files/'}"
+              action="#" th:action="@{'/files/'}">
+            <input class="btn btn-light" type="submit" value="Lista plików"/>
+        </form>
     </div>
 
     <hr class="hr">

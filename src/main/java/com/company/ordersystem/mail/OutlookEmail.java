@@ -11,22 +11,21 @@ public class OutlookEmail {
     private static String END_ORDER_MESSAGE = "Bardzo proszę o akceptację zlecenia i przesłanie podpisanego skanu mailem. ";
     private static String END_INQUIRY_MESSAGE = "Bardzo proszę o wycenę druku materiałów według przesłanej specyfikacji.";
 
-    public static void newOrderEmail(String fileName, List<Contact> contactList, OutlookSetting outlookSetting) {
-        newEmail(fileName, contactList, END_ORDER_MESSAGE, outlookSetting, false);
+    public static void newOrderEmail(String fileName, List<Contact> contactList, OutlookSetting outlookSetting, String ccEmails) {
+        newEmail(fileName, contactList, END_ORDER_MESSAGE, outlookSetting, ccEmails);
     }
 
     public static void newInquiryEmail(String fileName, List<Contact> contactList, OutlookSetting outlookSetting) {
-        newEmail(fileName, contactList, END_INQUIRY_MESSAGE, outlookSetting, true);
+        newEmail(fileName, contactList, END_INQUIRY_MESSAGE, outlookSetting, ";");
     }
 
     /**
      * ccEmail -> IF is empty  ";"
      */
-    private static void newEmail(String fileName, List<Contact> contactList, String endMessage, OutlookSetting outlookSetting, boolean ccEmpty) {
+    private static void newEmail(String fileName, List<Contact> contactList, String endMessage, OutlookSetting outlookSetting, String ccEmails) {
         Thread thread = new Thread(() -> {
 
             String pathFile = System.getProperty("user.home") + "\\Downloads\\" + fileName;
-            String ccMails;
 
             Contact mainContact = contactList.get(0);
 
@@ -48,16 +47,9 @@ public class OutlookEmail {
                 throw new RuntimeException(e);
             }
 
-            if (ccEmpty){
-                ccMails = ";";
-            }
-            else{
-                ccMails = outlookSetting.getCcEmails();
-            }
-
             try {
                 new ProcessBuilder(outlookSetting.getFilePath(), "/a",
-                        pathFile, "/m", emailsContactor + "&cc=" + ccMails+ "&subject=" + subject + "&body=" + body).start();
+                        pathFile, "/m", emailsContactor + "&cc=" + ccEmails+ "&subject=" + subject + "&body=" + body).start();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

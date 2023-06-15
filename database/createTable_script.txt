@@ -45,6 +45,7 @@ CREATE TABLE `orderSystem`.`company` (
   `nip` VARCHAR(20) NULL,
   `regon` VARCHAR(20) NULL,
   `address_id` INT NULL,
+  `cc_emails` varchar(1000) NULL,
   PRIMARY KEY (`id`),
   FOREIGN KEY (`address_id`) REFERENCES `address` (`id`))
 ENGINE = InnoDB
@@ -83,7 +84,7 @@ CREATE TABLE `orderSystem`.`orders` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `quantity` INT NULL,
   `file_deadline` DATE NULL,
-  `delivery_deadline` DATE NULL,  
+  `delivery_deadline` DATE NULL,
   `sent` DATE NULL,
   `price_pcs` DOUBLE NULL,
   `payment_term_id` INT NULL,
@@ -92,7 +93,8 @@ CREATE TABLE `orderSystem`.`orders` (
   `contractor_id` INT NULL,
   `company_id` INT NULL,
   `username` varchar(50) NOT NULL,
-  `update` INT NULL,		
+  `update` INT NULL,
+  `note` VARCHAR(200) NULL,
   PRIMARY KEY (`id`),
   FOREIGN KEY (`payment_term_id`) REFERENCES `payment_term` (`id`),
   FOREIGN KEY (`delivery_address_id`) REFERENCES `address` (`id`),
@@ -109,7 +111,7 @@ CREATE TABLE `orderSystem`.`campaign` (
   `name` VARCHAR(100) NULL,
   `quantity` INT NULL,
   `file_deadline` DATE NULL,
-  `delivery_deadline` DATE NULL,  
+  `delivery_deadline` DATE NULL,
   `address_id` INT NULL,
   `company_id` INT NULL,
   `payment_term_id` INT NULL,
@@ -124,6 +126,7 @@ COLLATE = utf8_polish_ci;
 CREATE TABLE `orderSystem`.`payment_term` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `term` VARCHAR(300) NULL,
+  `term_eng` VARCHAR(300) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
@@ -185,7 +188,7 @@ CREATE TABLE `orderSystem`.`product` (
   `cover` VARCHAR(100) NULL,
   `paper_cover_id` INT NULL,
   `color_cover_id` INT NULL,
-  `note` VARCHAR(200) NULL,  
+  `product_eng_id` INT NULL
   PRIMARY KEY (`id`),
   FOREIGN KEY(format_id) REFERENCES format(id),
   FOREIGN KEY(paper_id) REFERENCES paper(id),
@@ -212,7 +215,7 @@ COLLATE = utf8_polish_ci;
 CREATE TABLE `orderSystem`.`campaign_products` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `product_id` INT NULL,
-  `campaign_id` INT NULL,  
+  `campaign_id` INT NULL,
   PRIMARY KEY (`id`),
   FOREIGN KEY(product_id) REFERENCES product(id),
   FOREIGN KEY(campaign_id) REFERENCES campaign(id))
@@ -221,8 +224,7 @@ DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_polish_ci;
 
 CREATE TABLE `outlook_setting` (
-  `username` varchar(50) NOT NULL,	
-  `cc_emails` varchar(1000) NULL,
+  `username` varchar(50) NOT NULL,
   `file_path` varchar(100) NULL,
   `signature` varchar(300) NULL,
   UNIQUE KEY `outlook_settings_idx_1` (`username`),

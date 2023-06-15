@@ -11,9 +11,6 @@ public class OutlookSetting {
     @Column(name = "username", unique=true, columnDefinition="VARCHAR(50)")
     private String username;
 
-    @Column(name = "cc_emails")
-    private String ccEmails;
-
     @Column(name = "file_path")
     private String filePath;
 
@@ -30,14 +27,6 @@ public class OutlookSetting {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getCcEmails() {
-        return ccEmails;
-    }
-
-    public void setCcEmails(String ccEmails) {
-        this.ccEmails = ccEmails;
     }
 
     public String getFilePath() {
@@ -65,7 +54,6 @@ public class OutlookSetting {
     }
 
     public void   setSettings (OutlookSetting outlookSetting){
-        this.ccEmails = outlookSetting.getCcEmails();
         this.filePath = outlookSetting.getFilePath();
         this.signature = outlookSetting.getSignature();
     }
@@ -74,7 +62,6 @@ public class OutlookSetting {
     public String toString() {
         return "OutlookSetting{" +
                 "username='" + username + '\'' +
-                ", ccEmails='" + ccEmails + '\'' +
                 ", filePath='" + filePath + '\'' +
                 ", signature='" + signature + '\'' +
                 '}';

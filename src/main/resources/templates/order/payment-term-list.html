@@ -20,13 +20,15 @@
     <tr align="left">
         <th>ID</th>
         <th>Opis</th>
+        <th>Opis ENG</th>
         <th>Akcja</th>
     </tr>
 
     <th:block th:each="paymentTerm : ${paymentTerms}">
         <tr align="left">
             <td th:width="150" th:text="${paymentTerm.id}"></td>
-            <td th:width="500" th:text="${paymentTerm.term}"></td>
+            <td th:width="600" th:text="${paymentTerm.term}"></td>
+            <td th:width="600" th:text="${paymentTerm.termEng}"></td>
             <td>
                 <form th:action="@{'/payment-term/update/{id}'(id=${paymentTerm.id})}">
                     <input class="btn btn-info btn-sm"

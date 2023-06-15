@@ -42,6 +42,20 @@ public class ProductController implements ICrudController<Product> {
         return "/product/product-form";
     }
 
+    @RequestMapping(value = "/new-eng")
+    public String newFormEng (Model model){
+        boolean isEnglish = true;
+
+        Product product = new Product();
+        product.setProductEng(new Product());
+
+        newForm(model);
+        model.addAttribute("isEnglish", isEnglish);
+        model.addAttribute("product", product);
+
+        return "/product/product-form";
+    }
+
     @Override
     public String listForm(Model model) {
         List<Product> products = productService.getAll();
@@ -65,6 +79,10 @@ public class ProductController implements ICrudController<Product> {
             product.setCodeList(codeList);
         }
 
+        if (product.getProductEng() !=null){
+            model.addAttribute("isEnglish", true);;
+        }
+
         model.addAttribute("product", product);
         model.addAttribute("action", "/product/update/");
         model.addAttribute("actionDescription", "EDYCJA PRODUKTU: " + product.getName());
@@ -76,8 +94,13 @@ public class ProductController implements ICrudController<Product> {
     @Override
     public String delete(int id, Model model) {
         Product product = productService.get(id);
+        boolean result;
 
-        boolean result = productService.delete(product);
+        if (product.getProductEng() != null){
+            result = productService.delete(product.getProductEng());
+        }
+
+        result = productService.delete(product);
         String description = "Usunięcie produktu: " + product.getName() + " ";
 
         model.addAttribute("description", description);
@@ -106,7 +129,12 @@ public class ProductController implements ICrudController<Product> {
 
     @Override
     public String saveOrUpdate(Product product, String description, Model model) {
-        boolean result = productService.saveOrUpdate(product);
+        boolean result;
+
+        if (product.getProductEng() != null){
+            result = productService.saveOrUpdate(product.getProductEng());
+        }
+        result = productService.saveOrUpdate(product);
 
         model.addAttribute("result", result);
         model.addAttribute("description", description);
@@ -151,6 +179,9 @@ public class ProductController implements ICrudController<Product> {
         model.addAttribute("product", product);
         model.addAttribute("action", "/product/copy/");
         model.addAttribute("actionDescription", "KOPIOWANIE Z PRODUKTU: " + oldProduct.getName());
+        if (product.getProductEng() != null){
+            model.addAttribute("isEnglish", true);
+        }
         modelForm(model);
 
         return "/product/product-form";

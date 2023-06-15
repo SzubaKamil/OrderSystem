@@ -14,25 +14,30 @@
 
     <label>DANE FIRMY:</label>
     <input hidden="hidden" th:field="${company.id}">
-    <input class="form-control width-250" type="text" placeholder="Skócona nazwa" th:field="${company.shortcut}">
-    <input class="form-control width-250" type="text" placeholder="Nazwa" th:field="${company.name}">
-    <input class="form-control width-250" type="text" placeholder="NIP" th:field="${company.nip}">
-    <input class="form-control width-250" type="text" placeholder="REGON" th:field="${company.regon}">
+    <input class="form-control width-350" type="text" placeholder="Skócona nazwa" th:field="${company.shortcut}">
+    <input class="form-control width-350" type="text" placeholder="Nazwa" th:field="${company.name}">
+    <input class="form-control width-350" type="text" placeholder="NIP" th:field="${company.nip}">
+    <input class="form-control width-350" type="text" placeholder="REGON" th:field="${company.regon}">
     <br>
 
     <label>ADRES:</label>
     <input hidden="hidden" th:field="${company.address.id}">
-    <input class="form-control width-250" type="text" placeholder="Ulica" th:field="${company.address.street}">
-    <input class="form-control width-250" type="text" placeholder="Numer lokalu"
+    <input class="form-control width-350" type="text" placeholder="Ulica" th:field="${company.address.street}">
+    <input class="form-control width-350" type="text" placeholder="Numer lokalu"
            th:field="${company.address.streetNumber}">
-    <input class="form-control width-250" type="text" placeholder="Miasto" th:field="${company.address.city}">
-    <input class="form-control width-250" type="text" placeholder="Kod pocztowy" th:field="${company.address.postCode}">
-    <input class="form-control width-250" type="text" placeholder="Państwo" th:field="${company.address.country}">
+    <input class="form-control width-350" type="text" placeholder="Miasto" th:field="${company.address.city}">
+    <input class="form-control width-350" type="text" placeholder="Kod pocztowy" th:field="${company.address.postCode}">
+    <input class="form-control width-350" type="text" placeholder="Państwo" th:field="${company.address.country}">
     <input type="checkbox" id="delivery" checked th:field="${company.address.isDelivery}">
     <label for="delivery">Adres dostawy</label>
+
+    <br><br>
+    <label for="cc_email-input">Email-e DW: wprawadź znak ; pomiędzy </label> <br>
+    <textarea id="cc_email-input" rows = "10" cols = "40" th:field = "${company.ccEmails}"  >... </textarea>
+    <br>
     <br><br>
 
-    <input class="btn btn-success width-250" type="submit" value="Zapisz"/>
+    <input class="btn btn-success width-350" type="submit" value="Zapisz"/>
 </form>
 
 </body>

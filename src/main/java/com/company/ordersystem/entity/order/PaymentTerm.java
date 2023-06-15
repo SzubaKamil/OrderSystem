@@ -14,6 +14,9 @@ public class PaymentTerm {
     @Column(name = "term")
     private String term;
 
+    @Column(name = "term_eng")
+    private String termEng;
+
     public PaymentTerm() {
     }
 
@@ -29,8 +32,23 @@ public class PaymentTerm {
         return term;
     }
 
+    public String getTerm(boolean isEnglishVersion){
+        if (isEnglishVersion){
+            return termEng;
+        }
+        return term;
+    }
+
     public void setTerm(String term) {
         this.term = term;
+    }
+
+    public String getTermEng() {
+        return termEng;
+    }
+
+    public void setTermEng(String termEng) {
+        this.termEng = termEng;
     }
 
     @Override
@@ -38,6 +56,7 @@ public class PaymentTerm {
         return "PaymentTerm{" +
                 "id=" + id +
                 ", term='" + term + '\'' +
+                ", termEng='" + termEng + '\'' +
                 '}';
     }
 }

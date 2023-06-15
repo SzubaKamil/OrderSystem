@@ -101,6 +101,6 @@ public class Contact {
     @Override
     public String toString() {
         return firstName + " " + surname + "\nemail: " + email
-                + "\ntel. " + phone + ", " + phone2 + " address ID" + addressId;
+                + "\ntel. " + phone + ", " + phone2;
     }
 }

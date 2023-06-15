@@ -6,10 +6,26 @@
 <body>
 
 <script>
-    function showTextField(textFieldId) {
-        const visible = document.getElementById(textFieldId).hidden.valueOf();
+    function showTextField(textFieldId, textField2Id) {
+        let visible = document.getElementById(textFieldId).hidden.valueOf();
         document.getElementById(textFieldId).hidden = !visible;
+
+        visible = document.getElementById(textField2Id).hidden.valueOf();
+        document.getElementById(textField2Id).hidden = !visible;
     }
+</script>
+
+<script src="https://harvesthq.github.io/chosen/docsupport/jquery-3.2.1.min.js"></script>
+<script src="https://harvesthq.github.io/chosen/chosen.jquery.js"></script>
+<link rel="stylesheet" href="https://harvesthq.github.io/chosen/chosen.css">
+
+<script>
+    $(function() {
+        $('.firstComboBox').chosen().change(function() {
+            var selectedValue = $(this).val();
+            $(this).closest('tr').find('.secondComboBox').val(selectedValue).trigger('chosen:updated');
+        });
+    });
 </script>
 
 <div th:replace="fragments/general.html :: pageHeadByRole"></div>
@@ -20,136 +36,389 @@
 
 <form th:action="@{${action}}">
 
-    <input class="form-control width-250" type="text" placeholder="Nazwa produktu" th:field="${product.name}">
     <input hidden="hidden" th:field="${product.id}">
+    <input hidden="hidden" th:field="${product.productEng.id}">
 
-    <label for="format-select">Format:</label> <br>
-    <select id="format-select" class="width-250" th:field="${product.format.id}">
-        <option value="0" disabled></option>
-        <option th:each="tempFormat : ${formatList}"
-                th:value="${tempFormat.id}"
-                th:text="${tempFormat.format}">
-        </option>
-    </select>
+    <table>
+        <tr th:if="${isEnglish}">
+            <th>PL</th>
+            <th>ENG</th>
+        </tr>
 
-    <br>
-    <input type="checkbox" onclick="showTextField('inputAdditional')">Dodatkowe</input>
-    <input hidden="true" id="inputAdditional" class="form-control width-250" type="text" placeholder="Dodatkowe"
-           th:field="${product.additional}">
-    <br>
+        <tr>
+            <th>
+                <input class="form-control width-250" type="text" placeholder="Nazwa produktu" th:field="${product.name}">
+            </th>
+            <th th:if="${isEnglish}">
+                <input  class="form-control width-250" type="text" placeholder="Product name" th:field="${product.productEng.name}">
+            </th>
+        </tr>
 
-    <input type="checkbox" onclick="showTextField('paperSelect')">Papier</input>
-    <div hidden="hidden" id="paperSelect">
-        <select th:field="${product.paper.id}">
-            <option value="0" disabled></option>
-            <option th:each="tempPaper : ${paperList}"
-                    th:value="${tempPaper.id}"
-                    th:text="${tempPaper.value}">
-            </option>
-        </select>
-    </div>
-    <br>
+        <tr>
+            <th>
+                <label for="format-select">Format:</label> <br>
+                <select id="format-select" class="width-250 firstComboBox chosen-select" th:field="${product.format.id}" >
+                    <option value="0" disabled></option>
+                    <option th:each="tempFormat : ${formatList}"
+                            th:value="${tempFormat.id}"
+                            th:text="${tempFormat.format}">
+                    </option>
+                </select>
+            </th>
+            <th th:if="${isEnglish}">
+                <label for="format-selectEng">Format:</label> <br>
+                <select  id="format-selectEng" class="width-250 secondComboBox chosen-select" th:field="${product.productEng.format.id}">
+                    <option value="0" disabled></option>
+                    <option th:each="tempFormat : ${formatList}"
+                            th:value="${tempFormat.id}"
+                            th:text="${tempFormat.format}">
+                    </option>
+                </select>
+            </th>
+        </tr>
 
-    <input type="checkbox" onclick="showTextField('colorSelect')">Kolor</input>
-    <div hidden="hidden" id="colorSelect">
-        <select th:field="${product.color.id}">
-            <option value="0" disabled></option>
-            <option th:each="tempColor : ${colorList}"
-                    th:value="${tempColor.id}"
-                    th:text="${tempColor.value}">
-            </option>
-        </select>
-    </div>
-    <br>
+        <tr>
+            <th>
+                <input type="checkbox" onclick="showTextField('inputAdditional', 'inputAdditionalEng')">Dodatkowe</input>
+            </th>
+        </tr>
 
-    <input type="checkbox" onclick="showTextField('inputNumBerPages')">Ilość stron</input>
-    <input hidden="true" id="inputNumBerPages" class="form-control width-250" type="text" placeholder="Ilość stron"
-           th:field="${product.numberPages}">
-    <br>
+        <tr>
+            <th>
+                <input hidden="hidden" id="inputAdditional" class="form-control width-250" type="text" placeholder="Dodatkowe"
+                       th:field="${product.additional}">
+            </th>
+            <th th:if="${isEnglish}">
+                <input hidden="true" id="inputAdditionalEng" class="form-control width-250" type="text" placeholder="Additional"
+                       th:field="${product.productEng.additional}">
+            </th>
+        </tr>
 
-    <input type="checkbox" onclick="showTextField('inputPerforation')">Perforacja</input>
-    <input hidden="true" id="inputPerforation" class="form-control width-250" type="text" placeholder="Perforacja"
-           th:field="${product.perforation}">
-    <br>
+        <tr>
+            <th>
+                <input type="checkbox" onclick="showTextField('paperSelect', 'paperSelectEng')">Papier</input>
+            </th>
+        </tr>
 
-    <input type="checkbox" onclick="showTextField('inputCovering')">Pokrycie</input>
-    <input hidden="true" id="inputCovering" class="form-control width-250" type="text" placeholder="Pokrycie"
-           th:field="${product.covering}">
-    <br>
+        <tr>
+            <th>
+                <div hidden="hidden" id="paperSelect">
+                    <select class="firstComboBox chosen-select" th:field="${product.paper.id}">
+                        <option value="0" disabled></option>
+                        <option th:each="tempPaper : ${paperList}"
+                                th:value="${tempPaper.id}"
+                                th:text="${tempPaper.value}">
+                        </option>
+                    </select>
+                </div>
+            </th>
+            <th th:if="${isEnglish}">
+                <div hidden="hidden" id="paperSelectEng">
+                    <select class="secondComboBox chosen-select" th:field="${product.productEng.paper.id}">
+                        <option value="0" disabled></option>
+                        <option th:each="tempPaper : ${paperList}"
+                                th:value="${tempPaper.id}"
+                                th:text="${tempPaper.value}">
+                        </option>
+                    </select>
+                </div>
+            </th>
+        </tr>
 
-    <input type="checkbox" onclick="showTextField('inputFlap')">Klapka</input>
-    <input hidden="true" id="inputFlap" class="form-control width-250" type="text" placeholder="Klapka"
-           th:field="${product.flap}">
-    <br>
+        <tr>
+            <th>
+                <input type="checkbox" onclick="showTextField('colorSelect', 'colorSelectEng')">Kolor</input>
+            </th>
+        </tr>
 
-    <input type="checkbox" onclick="showTextField('inputWindow')">Okno</input>
-    <input hidden="true" id="inputWindow" class="form-control width-250" type="text" placeholder="Okno"
-           th:field="${product.window}">
-    <br>
+        <tr>
+            <th>
+                <div hidden="hidden" id="colorSelect">
+                    <select class="firstComboBox chosen-select" th:field="${product.color.id}">
+                        <option value="0" disabled></option>
+                        <option th:each="tempColor : ${colorList}"
+                                th:value="${tempColor.id}"
+                                th:text="${tempColor.value}"></option>
+                    </select>
+                </div>
+            </th>
+            <th th:if="${isEnglish}">
+                <div hidden="hidden" id="colorSelectEng">
+                    <select class="secondComboBox chosen-select" th:field="${product.productEng.color.id}">
+                        <option value="0" disabled></option>
+                        <option th:each="tempColor : ${colorList}"
+                                th:value="${tempColor.id}"
+                                th:text="${tempColor.value}"></option>
+                    </select>
+                </div>
+            </th>
+        </tr>
 
-    <input type="checkbox" onclick="showTextField('inputGlued')">Klejenie</input>
-    <input hidden="true" id="inputGlued" class="form-control width-250" type="text" placeholder="Klejenie"
-           th:field="${product.glued}">
-    <br>
+        <tr>
+            <th>
+                <input type="checkbox" onclick="showTextField('inputNumBerPages', 'inputNumBerPagesEng')">Ilość stron</input>
+            </th>
+        </tr>
 
-    <input type="checkbox" onclick="showTextField('inputPrintingFinishing')">Uszlachetnienie</input>
-    <input hidden="true" id="inputPrintingFinishing" class="form-control width-250" type="text"
-           placeholder="Uszlachetnienie" th:field="${product.printingFinishing}">
-    <br>
+        <tr>
+            <th>
+                <input  hidden="true" id="inputNumBerPages" class="form-control width-250" type="text" placeholder="Ilość stron"
+                       th:field="${product.numberPages}">
+            </th>
+            <th th:if="${isEnglish}">
+                <input hidden="true" id="inputNumBerPagesEng" class="form-control width-250" type="text" placeholder="Number of pages"
+                       th:field="${product.productEng.numberPages}">
+            </th>
+        </tr>
 
-    <input type="checkbox" onclick="showTextField('paperInsideSelect')">Papier środek:</input>
-    <div hidden="hidden" id="paperInsideSelect">
-        <select th:field="${product.paperInside.id}">
-            <option value="0" disabled></option>
-            <option th:each="tempPaper : ${paperList}"
-                    th:value="${tempPaper.id}"
-                    th:text="${tempPaper.value}">
-            </option>
-        </select>
-    </div>
-    <br>
+        <tr>
+            <th>
+                <input type="checkbox" onclick="showTextField('inputPerforation', 'inputPerforationEng')">Perforacja</input>
+            </th>
+        </tr>
 
-    <input type="checkbox" onclick="showTextField('colorInsideSelect')">Kolor środek:</input>
-    <div hidden="hidden" id="colorInsideSelect">
-        <select th:field="${product.colorInside.id}">
-            <option value="0" disabled></option>
-            <option th:each="tempColor : ${colorList}"
-                    th:value="${tempColor.id}"
-                    th:text="${tempColor.value}">
-            </option>
-        </select>
-    </div>
-    <br>
+        <tr>
+            <th>
+                <input hidden="true" id="inputPerforation" class="form-control width-250" type="text" placeholder="Perforacja"
+                       th:field="${product.perforation}">
+            </th>
+            <th th:if="${isEnglish}">
+                <input hidden="true" id="inputPerforationEng" class="form-control width-250" type="text" placeholder="Perforation"
+                       th:field="${product.productEng.perforation}">
+            </th>
+        </tr>
 
-    <input type="checkbox" onclick="showTextField('inputCover')">Okładka</input>
-    <input hidden="true" id="inputCover" class="form-control width-250" type="text" placeholder="Okładka"
-           th:field="${product.cover}">
-    <br>
+        <tr>
+            <th>
+                <input type="checkbox" onclick="showTextField('inputCovering', 'inputCoveringEng')">Pokrycie</input>
+            </th>
+        </tr>
 
-    <input type="checkbox" onclick="showTextField('paperCoverSelect')">Papier okładka:</input>
-    <div hidden="hidden" id="paperCoverSelect">
-        <select th:field="${product.paperCover.id}">
-            <option value="0" disabled></option>
-            <option th:each="tempPaper : ${paperList}"
-                    th:value="${tempPaper.id}"
-                    th:text="${tempPaper.value}">
-            </option>
-        </select>
-    </div>
-    <br>
+        <tr>
+            <th>
+                <input hidden="true" id="inputCovering" class="form-control width-250" type="text" placeholder="Pokrycie"
+                       th:field="${product.covering}">
+            </th>
+            <th th:if="${isEnglish}">
+                <input hidden="true" id="inputCoveringEng" class="form-control width-250" type="text" placeholder="Covering"
+                       th:field="${product.productEng.covering}">
+            </th>
+        </tr>
 
-    <input type="checkbox" onclick="showTextField('colorCoverSelect') ">Kolor okładka:</input>
-    <div hidden="hidden" id="colorCoverSelect">
-        <select th:field="${product.colorCover.id}">
-            <option value="0" disabled></option>
-            <option th:each="tempColor : ${colorList}"
-                    th:value="${tempColor.id}"
-                    th:text="${tempColor.value}">
-            </option>
-        </select>
-    </div>
-    <br>
-    <input class="btn btn-success width-250" type="submit" value="Zapisz"/>
+        <tr>
+            <th>
+                <input type="checkbox" onclick="showTextField('inputFlap', 'inputFlapEng')">Klapka</input>
+            </th>
+        </tr>
+
+        <tr>
+            <th>
+                <input hidden="true" id="inputFlap" class="form-control width-250" type="text" placeholder="Klapka"
+                       th:field="${product.flap}">
+            </th>
+            <th th:if="${isEnglish}">
+                <input hidden="true" id="inputFlapEng" class="form-control width-250" type="text" placeholder="Klapka"
+                       th:field="${product.productEng.flap}">
+            </th>
+        </tr>
+
+        <tr>
+            <th>
+                <input type="checkbox" onclick="showTextField('inputWindow', 'inputWindowEng')">Okno</input>
+            </th>
+        </tr>
+
+        <tr>
+            <th>
+                <input hidden="true" id="inputWindow" class="form-control width-250" type="text" placeholder="Okno"
+                       th:field="${product.window}">
+            </th>
+            <th th:if="${isEnglish}">
+                <input hidden="true" id="inputWindowEng" class="form-control width-250" type="text" placeholder="Window"
+                       th:field="${product.productEng.window}">
+            </th>
+        </tr>
+
+        <tr>
+            <th>
+                <input type="checkbox" onclick="showTextField('inputGlued', 'inputGluedEng')">Klejenie</input>
+            </th>
+        </tr>
+        <tr>
+            <th>
+                <input hidden="true" id="inputGlued" class="form-control width-250" type="text" placeholder="Klejenie"
+                       th:field="${product.glued}">
+            </th>
+            <th th:if="${isEnglish}">
+                <input hidden="true" id="inputGluedEng" class="form-control width-250" type="text" placeholder="Glued"
+                       th:field="${product.productEng.glued}">
+            </th>
+        </tr>
+
+        <tr>
+            <th>
+                <input type="checkbox" onclick="showTextField('inputPrintingFinishing', 'inputPrintingFinishingEng')">Uszlachetnienie</input>
+            </th>
+        </tr>
+
+        <tr>
+            <th>
+                <input hidden="true" id="inputPrintingFinishing" class="form-control width-250" type="text"
+                       placeholder="Uszlachetnienie" th:field="${product.printingFinishing}">
+            </th>
+            <th th:if="${isEnglish}">
+                <input hidden="true" id="inputPrintingFinishingEng" class="form-control width-250" type="text"
+                       placeholder="Special" th:field="${product.productEng.printingFinishing}">
+            </th>
+        </tr>
+
+        <tr>
+            <th>
+                <input type="checkbox" onclick="showTextField('paperInsideSelect', 'paperInsideSelectEng')">Papier środek:</input>
+            </th>
+        </tr>
+
+        <tr>
+            <th>
+                <div hidden="hidden" id="paperInsideSelect">
+                    <select class="firstComboBox chosen-select" th:field="${product.paperInside.id}">
+                        <option value="0" disabled></option>
+                        <option th:each="tempPaper : ${paperList}"
+                                th:value="${tempPaper.id}"
+                                th:text="${tempPaper.value}">
+                        </option>
+                    </select>
+                </div>
+            </th>
+            <th th:if="${isEnglish}">
+                <div hidden="hidden" id="paperInsideSelectEng">
+                    <select class="secondComboBox chosen-select" th:field="${product.productEng.paperInside.id}">
+                        <option value="0" disabled></option>
+                        <option th:each="tempPaper : ${paperList}"
+                                th:value="${tempPaper.id}"
+                                th:text="${tempPaper.value}">
+                        </option>
+                    </select>
+                </div>
+            </th>
+        </tr>
+
+        <tr>
+            <th>
+                <input type="checkbox" onclick="showTextField('colorInsideSelect', 'colorInsideSelectEng')">Kolor środek:</input>
+            </th>
+        </tr>
+
+        <tr>
+            <th>
+                <div hidden="hidden" id="colorInsideSelect">
+                    <select class="firstComboBox chosen-select" th:field="${product.colorInside.id}">
+                        <option value="0" disabled></option>
+                        <option th:each="tempColor : ${colorList}"
+                                th:value="${tempColor.id}"
+                                th:text="${tempColor.value}">
+                        </option>
+                    </select>
+                </div>
+            </th>
+            <th th:if="${isEnglish}">
+                <div hidden="hidden" id="colorInsideSelectEng">
+                    <select class="secondComboBox chosen-select" th:field="${product.productEng.colorInside.id}">
+                        <option value="0" disabled></option>
+                        <option th:each="tempColor : ${colorList}"
+                                th:value="${tempColor.id}"
+                                th:text="${tempColor.value}">
+                        </option>
+                    </select>
+                </div>
+            </th>
+        </tr>
+
+        <tr>
+            <th>
+                <input type="checkbox" onclick="showTextField('inputCover', 'inputCoverEng')">Okładka</input>
+            </th>
+        </tr>
+
+        <tr>
+            <th>
+                <input hidden="true" id="inputCover" class="form-control width-250" type="text" placeholder="Okładka"
+                       th:field="${product.cover}">
+            </th>
+            <th th:if="${isEnglish}">
+                <input hidden="true" id="inputCoverEng" class="form-control width-250" type="text" placeholder="Cover"
+                       th:field="${product.productEng.cover}">
+            </th>
+        </tr>
+
+        <tr>
+            <th>
+                <input type="checkbox" onclick="showTextField('paperCoverSelect', 'paperCoverSelectEng')">Papier okładka:</input>
+            </th>
+        </tr>
+
+        <tr>
+            <th>
+                <div hidden="hidden" id="paperCoverSelect">
+                    <select class="firstComboBox chosen-select" th:field="${product.paperCover.id}">
+                        <option value="0" disabled></option>
+                        <option th:each="tempPaper : ${paperList}"
+                                th:value="${tempPaper.id}"
+                                th:text="${tempPaper.value}">
+                        </option>
+                    </select>
+                </div>
+            </th>
+            <th th:if="${isEnglish}">
+                <div hidden="hidden" id="paperCoverSelectEng">
+                    <select class="secondComboBox chosen-select" th:field="${product.productEng.paperCover.id}">
+                        <option value="0" disabled></option>
+                        <option th:each="tempPaper : ${paperList}"
+                                th:value="${tempPaper.id}"
+                                th:text="${tempPaper.value}">
+                        </option>
+                    </select>
+                </div>
+            </th>
+        </tr>
+
+        <tr>
+            <th>
+                <input type="checkbox" onclick="showTextField('colorCoverSelect', 'colorCoverSelectEng') ">Kolor okładka:</input>
+            </th>
+        </tr>
+
+        <tr>
+            <th>
+                <div hidden="hidden" id="colorCoverSelect">
+                    <select class="firstComboBox chosen-select" th:field="${product.colorCover.id}">
+                        <option value="0" disabled></option>
+                        <option th:each="tempColor : ${colorList}"
+                                th:value="${tempColor.id}"
+                                th:text="${tempColor.value}">
+                        </option>
+                    </select>
+                </div>
+            </th>
+            <th th:if="${isEnglish}">
+                <div hidden="hidden" id="colorCoverSelectEng">
+                    <select class="secondComboBox chosen-select" th:field="${product.productEng.colorCover.id}">
+                        <option value="0" disabled></option>
+                        <option th:each="tempColor : ${colorList}"
+                                th:value="${tempColor.id}"
+                                th:text="${tempColor.value}">
+                        </option>
+                    </select>
+                </div>
+            </th>
+        </tr>
+
+        <tr>
+            <th>
+                <input class="btn btn-success width-250" type="submit" value="Zapisz"/>
+            </th>
+        </tr>
+    </table>
 </form>
 
 <br><br>
@@ -197,6 +466,50 @@
                 <th th:width="200" th:text="${tempCode.quantity}"></th>
                 <th>
                     <form th:action="@{'/product/delete-code/{codeId}/{productId}' (codeId=${tempCode.id}, productId=${product.id})}">
+                        <input class="btn btn-danger btn-sm" type="submit" value="Usuń">
+                    </form>
+                </th>
+            </tr>
+        </th:block>
+    </table>
+</div>
+
+<br>
+
+<div th:if="${product.productEng.id > 0}">
+    <br><br>
+    <hr class="hr">
+    <h4>KODY PRODUKTU ENG</h4>
+    <br>
+
+    <input type="checkbox" onclick="showTextField('productCodeEng')">DODAJ KOD PRODUKT ENG:</input>
+    <div id="productCodeEng" hidden="hidden">
+
+        <form th:action="@{'/product/save-code/{productId}'(productId=${product.productEng.id})}">
+            <input class="form-control width-250" type="text" placeholder="Kod produktu ENG"
+                   th:field="${code.code}">
+
+            <label for="code-inputEng">Ilosć:</label> <br>
+            <input id="code-inputEng" class="form-control width-250" type="text" placeholder="Ilość"
+                   th:field="${code.quantity}">
+            <input class="btn btn-info btn-sm width-250" type="submit" value="Dodaj"/>
+        </form>
+    </div>
+
+    <table th:if="${product.productEng.codeList.size() > 0}">
+        <tr align="left">
+            <th>ID</th>
+            <th>Kod produktu</th>
+            <th>Ilość</th>
+            <th>Akcja</th>
+        </tr>
+        <th:block th:each="tempCode : ${product.productEng.codeList}">
+            <tr align="left">
+                <th th:width="200" th:text="${product.productEng.codeList.indexOf(tempCode)}"></th>
+                <th th:width="200" th:text="${tempCode.code}"></th>
+                <th th:width="200" th:text="${tempCode.quantity}"></th>
+                <th>
+                    <form th:action="@{'/product/delete-code/{codeId}/{productId}' (codeId=${tempCode.id}, productId=${product.productEng.id})}">
                         <input class="btn btn-danger btn-sm" type="submit" value="Usuń">
                     </form>
                 </th>

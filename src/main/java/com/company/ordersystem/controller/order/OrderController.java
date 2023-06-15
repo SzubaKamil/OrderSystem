@@ -220,7 +220,7 @@ public class OrderController implements ICrudController<Order> {
         ResponseEntity<ByteArrayResource> responseEntity = saveFileLocal(fileName);
 
         List<Contact> contactList = new ArrayList<>(order.getContractor().getAddress().getContacts());
-        OutlookEmail.newOrderEmail(fileName, contactList, getCurrentUser().getOutlookSetting());
+        OutlookEmail.newOrderEmail(fileName, contactList, getCurrentUser().getOutlookSetting(), order.getCompany().getCcEmails());
 
         return responseEntity;
     }

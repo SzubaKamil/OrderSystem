@@ -86,6 +86,10 @@ public class Product implements Cloneable{
     @Persister(impl = ReadOnlyCollectionPersister.class)
     List<Campaign> campaignList;
 
+    @OneToOne
+    @JoinColumn(name = "product_eng_id")
+    private Product productEng;
+
 
     public Product() {
         this.codeList = new ArrayList<>();
@@ -110,6 +114,7 @@ public class Product implements Cloneable{
         this.cover = product.getCover();
         this.paperCover = product.getPaperCover();
         this.colorCover = product.getColorCover();
+        this.productEng = product.getProductEng();
 
         for(Code code: product.getCodeList()){
             try {
@@ -281,6 +286,14 @@ public class Product implements Cloneable{
         this.campaignList = campaignList;
     }
 
+    public Product getProductEng() {
+        return productEng;
+    }
+
+    public void setProductEng(Product productEng) {
+        this.productEng = productEng;
+    }
+
     public void addCode (Code code){
         this.codeList.add(code);
         code.setProductId(id);
@@ -318,6 +331,14 @@ public class Product implements Cloneable{
 
     @Override
     public Product clone() throws CloneNotSupportedException {
-        return new Product(this);
+        Product productEngTemp = null;
+        if (this.productEng != null){
+            productEngTemp = this.productEng.clone();
+        }
+
+        Product product = new Product(this);
+        product.setProductEng(productEngTemp);
+
+        return product;
     }
 }

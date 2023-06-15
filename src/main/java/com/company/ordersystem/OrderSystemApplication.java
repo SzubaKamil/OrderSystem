@@ -17,9 +17,8 @@ public class OrderSystemApplication {
 	// 			->  copy
 	// 		- Move script to script folder ->  static/script file
 	// - FUNCTIONALITY
+	// 		- Sort order in order list by company
+	//		- Sort product by All and product without productEng
 	// - CAMPAIGN ADD STATUS TO DB
-	// - ENGLISH VERSION
-	// 		- Printing order make 2 language version
-	//      - Product make 2 language version
 
 }

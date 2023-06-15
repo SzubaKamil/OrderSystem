@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: headfragment">
+
+</head>
+<body>
+
+<div th:replace="fragments/general.html :: pageHeadByRole"></div>
+
+
+<h4 th:text="${actionDescription}"></h4>
+<hr class="hr">
+
+<form action="/files/list" method="get">
+  <label for="folder-path">Wprowadź ścieżkę katalogu:</label>
+  <br>
+  <input type="text" id="folder-path" name="folderPath" class="form-control width-250">
+  <br>
+  <input type="submit" value="Wyswietl pliki" class="btn btn-info btn-sm width-250">
+</form>
+
+<br><br>
+
+<p>
+  <th:block th:each="fileName : ${fileNames}">
+      <td th:width="500" th:text="${fileName}"></td>
+      <br>
+  </th:block>
+</p>
+
+<form>
+  <button type="button" class="btn btn-info btn-sm width-250" onclick=" copyTextToClipboard(window.getSelection().toString())">Kopiuj zaznaczone do schowka</button>
+</form>
+
+<script>
+    function copyTextToClipboard(text) {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        textarea.remove();
+    }
+</script>
+
+</body>
+</html>

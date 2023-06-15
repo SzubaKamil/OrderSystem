@@ -15,6 +15,7 @@
   <form th:action="@{${action}}">
     <input hidden="hidden" th:field="${paymentTerm.id}">
     <input class="form-control width-350 inline" type="text" placeholder="WARUNKI PŁATNOŚCI" th:field="${paymentTerm.term}">
+    <input class="form-control width-350 inline" type="text" placeholder="WARUNKI PŁATNOŚCI ENG" th:field="${paymentTerm.termEng}">
     <input class="btn btn-success width-250" type="submit" value="Dodaj"/>
   </form>
 
